@@ -10,7 +10,26 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# 環境設定の読み込み
+# DJANGO_ENV環境変数に基づいて適切な.envファイルを読み込む
+# デフォルトはdevelopment
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'development')
+if DJANGO_ENV == 'production':
+    # 本番環境用の.envファイル
+    env_path = Path(__file__).resolve().parent.parent / 'env/production/.env'
+else:
+    # 開発環境用の.envファイル
+    env_path = Path(__file__).resolve().parent.parent / 'env/local/.env'
+
+# .envファイルが存在する場合は読み込む
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
+else:
+    print(f"Warning: {env_path} not found. Using default settings.")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +39,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b525gig#ci$vp0rg#$w95hzi^a8u7s2fldl93=7xf7s=j#8bhf'
+SECRET_KEY = os.getenv(
+    'SECRET_KEY', 'django-insecure-b525gig#ci$vp0rg#$w95hzi^a8u7s2fldl93=7xf7s=j#8bhf')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(
+    ',') if os.getenv('ALLOWED_HOSTS') else []
 
 
 # Application definition
