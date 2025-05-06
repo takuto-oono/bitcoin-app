@@ -3,11 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
 
 	"bitcoin-app/golang/config"
+	"bitcoin-app/golang/router"
 )
 
 func main() {
@@ -20,12 +18,7 @@ func main() {
 		panic(err)
 	}
 
-	// TODO: ginのdefaultは色々いけないらしいので改良する。
-	router := gin.Default()
-
-	router.GET("/test", func(c *gin.Context) {
-		c.String(http.StatusOK, "hello golang server")
-	})
+	router := router.NewRouter(cfg)
 
 	if err := router.Run(fmt.Sprintf(":%s", cfg.GeneralSetting.Port)); err != nil {
 		panic(err)

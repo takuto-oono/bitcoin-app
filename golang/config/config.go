@@ -8,13 +8,23 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type Credential string
+
+func (c Credential) String() string {
+	return string("************")
+}
+
+func (c Credential) GoString() string {
+	return "************"
+}
+
 type GeneralSetting struct {
 	Port string `toml:"port"`
 }
 
 type BitFlyer struct {
-	ApiKey    string
-	ApiSecret string
+	ApiKey    Credential
+	ApiSecret Credential
 }
 
 type Config struct {
@@ -50,8 +60,8 @@ func (c *Config) setFromEnv(envFilePath string) error {
 		return err
 	}
 
-	c.BitFlyer.ApiKey = os.Getenv("BITFLYER_API_KEY")
-	c.BitFlyer.ApiSecret = os.Getenv("BITFLYER_API_SECRET")
+	c.BitFlyer.ApiKey = Credential(os.Getenv("BITFLYER_API_KEY"))
+	c.BitFlyer.ApiSecret = Credential(os.Getenv("BITFLYER_API_SECRET"))
 
 	return nil
 }
