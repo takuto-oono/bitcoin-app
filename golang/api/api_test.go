@@ -1,9 +1,20 @@
 package api
 
 import (
+	"bitcoin-app/golang/config"
 	"reflect"
 	"testing"
 )
+
+var testConfig config.Config
+
+func init() {
+	var err error
+	testConfig, err = config.NewConfig("../toml/local.toml", "../env/.env.test")
+	if err != nil {
+		panic(err)
+	}
+}
 
 func Test_marshalJson(t *testing.T) {
 	type args struct {
