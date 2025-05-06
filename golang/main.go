@@ -12,9 +12,10 @@ import (
 
 func main() {
 	tomlFilePath := flag.String("toml", "toml/local.toml", "toml file path")
+	envFilePath := flag.String("env", ".env", "env file path")
 	flag.Parse()
 
-	cfg, err := config.NewConfig(*tomlFilePath)
+	cfg, err := config.NewConfig(*tomlFilePath, *envFilePath)
 	if err != nil {
 		panic(err)
 	}

@@ -2,22 +2,34 @@ package config
 
 import (
 	"errors"
+	"os"
 
 	"github.com/BurntSushi/toml"
+	"github.com/joho/godotenv"
 )
 
 type GeneralSetting struct {
 	Port string `toml:"port"`
 }
 
-type Config struct {
-	GeneralSetting `toml:"general"`
+type BitFlyer struct {
+	ApiKey    string
+	ApiSecret string
 }
 
-func NewConfig(tomlFilePath string) (Config, error) {
+type Config struct {
+	GeneralSetting `toml:"general"`
+	BitFlyer
+}
+
+func NewConfig(tomlFilePath, envFilePath string) (Config, error) {
 	var cfg Config
 
-	if _, err := toml.DecodeFile(tomlFilePath, &cfg); err != nil {
+	if err := cfg.setFromToml(tomlFilePath); err != nil {
+		return Config{}, err
+	}
+
+	if err := cfg.setFromEnv(envFilePath); err != nil {
 		return Config{}, err
 	}
 
@@ -28,6 +40,22 @@ func NewConfig(tomlFilePath string) (Config, error) {
 	return cfg, nil
 }
 
+func (c *Config) setFromToml(tomlFilePath string) error {
+	_, err := toml.DecodeFile(tomlFilePath, c)
+	return err
+}
+
+func (c *Config) setFromEnv(envFilePath string) error {
+	if err := godotenv.Load(envFilePath); err != nil {
+		return err
+	}
+
+	c.BitFlyer.ApiKey = os.Getenv("BITFLYER_API_KEY")
+	c.BitFlyer.ApiSecret = os.Getenv("BITFLYER_API_SECRET")
+
+	return nil
+}
+
 func (c *Config) mustCheck() error {
 	if c == nil {
 		return errors.New("config is nil")
@@ -35,6 +63,14 @@ func (c *Config) mustCheck() error {
 
 	if c.GeneralSetting.Port == "" {
 		return errors.New("port is empty")
+	}
+
+	if c.BitFlyer.ApiKey == "" {
+		return errors.New("bitflyer api key is empty")
+	}
+
+	if c.BitFlyer.ApiSecret == "" {
+		return errors.New("bitflyer api secret is empty")
 	}
 
 	return nil
