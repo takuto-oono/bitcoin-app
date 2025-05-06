@@ -1,11 +1,12 @@
 package usecase
 
 import (
-	"bitcoin-app/golang/api"
-	"bitcoin-app/golang/config"
 	"net/http"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/api"
+	"bitcoin-app-golang/config"
 )
 
 func TestNewBitFlyerUsecase(t *testing.T) {

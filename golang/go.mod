@@ -1,4 +1,4 @@
-module bitcoin-app/golang
+module bitcoin-app-golang
 
 go 1.24.2
 

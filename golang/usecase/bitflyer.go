@@ -3,8 +3,8 @@ package usecase
 import (
 	"net/http"
 
-	"bitcoin-app/golang/api"
-	"bitcoin-app/golang/config"
+	"bitcoin-app-golang/api"
+	"bitcoin-app-golang/config"
 )
 
 type IBitFlyerUsecase interface {

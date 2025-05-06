@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 
-	"bitcoin-app/golang/config"
-	"bitcoin-app/golang/router"
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/router"
 )
 
 func main() {
