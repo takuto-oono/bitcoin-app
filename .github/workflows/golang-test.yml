@@ -2,8 +2,8 @@ name: Golang Tests
 
 on:
   push:
-    paths:
-      - '.github/workflows/golang-test.yml'
+    branches: [ '*' ]
+  pull_request:
 
 jobs:
   test:
