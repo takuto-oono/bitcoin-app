@@ -8,11 +8,6 @@ import (
 	"testing"
 )
 
-const (
-	TestBitFlyerAPIKey    = "BITFLYER_API_KEY_HOGE_HOGE"
-	TestBitFlyerAPISecret = "BITFLYER_API_SECRET_HOGE_HOGE"
-)
-
 func TestNewBitFlyerUsecase(t *testing.T) {
 	type args struct {
 		cfg config.Config
@@ -25,35 +20,11 @@ func TestNewBitFlyerUsecase(t *testing.T) {
 		{
 			name: "success",
 			args: args{
-				cfg: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
+				cfg: TestConfig,
 			},
 			want: &BitFlyerUsecase{
-				Config: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
-				BitFlyerAPI: api.NewBitFlyerAPI(config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				}),
+				Config:      TestConfig,
+				BitFlyerAPI: api.NewBitFlyerAPI(TestConfig),
 			},
 		},
 	}
@@ -85,24 +56,8 @@ func TestBitFlyerUsecase_GetTicker(t *testing.T) {
 		{
 			name: "success",
 			fields: fields{
-				Config: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
-				BitFlyerAPI: api.NewBitFlyerAPI(config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				}),
+				Config:      TestConfig,
+				BitFlyerAPI: api.NewBitFlyerAPI(TestConfig),
 			},
 			args: args{
 				productCode: "BTC_JPY",
@@ -116,24 +71,8 @@ func TestBitFlyerUsecase_GetTicker(t *testing.T) {
 		{
 			name: "productCode is empty",
 			fields: fields{
-				Config: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
-				BitFlyerAPI: api.NewBitFlyerAPI(config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				}),
+				Config:      TestConfig,
+				BitFlyerAPI: api.NewBitFlyerAPI(TestConfig),
 			},
 			args: args{
 				productCode: "",
@@ -147,24 +86,8 @@ func TestBitFlyerUsecase_GetTicker(t *testing.T) {
 		{
 			name: "productCode is invalid",
 			fields: fields{
-				Config: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
-				BitFlyerAPI: api.NewBitFlyerAPI(config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				}),
+				Config:      TestConfig,
+				BitFlyerAPI: api.NewBitFlyerAPI(TestConfig),
 			},
 			args: args{
 				productCode: "invalid",

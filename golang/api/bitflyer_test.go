@@ -6,11 +6,6 @@ import (
 	"testing"
 )
 
-const (
-	TestBitFlyerAPIKey    = "BITFLYER_API_KEY_HOGE_HOGE"
-	TestBitFlyerAPISecret = "BITFLYER_API_SECRET_HOGE_HOGE"
-)
-
 func TestNewBitFlyerAPI(t *testing.T) {
 	type args struct {
 		cfg config.Config
@@ -23,27 +18,11 @@ func TestNewBitFlyerAPI(t *testing.T) {
 		{
 			name: "success",
 			args: args{
-				cfg: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
+				cfg: testConfig,
 			},
 			want: &BitFlyerAPI{
-				Config: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
-				API: NewAPI(),
+				Config: testConfig,
+				API:    NewAPI(),
 			},
 		},
 	}
@@ -74,16 +53,8 @@ func TestBitFlyerAPI_GetTicker(t *testing.T) {
 		{
 			name: "success",
 			fields: fields{
-				Config: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
-				API: NewAPI(),
+				Config: testConfig,
+				API:    NewAPI(),
 			},
 			args: args{
 				productCode: "BTC_JPY",
@@ -96,16 +67,8 @@ func TestBitFlyerAPI_GetTicker(t *testing.T) {
 		{
 			name: "fail",
 			fields: fields{
-				Config: config.Config{
-					GeneralSetting: config.GeneralSetting{
-						Port: "8080",
-					},
-					BitFlyer: config.BitFlyer{
-						ApiKey:    TestBitFlyerAPIKey,
-						ApiSecret: TestBitFlyerAPISecret,
-					},
-				},
-				API: NewAPI(),
+				Config: testConfig,
+				API:    NewAPI(),
 			},
 			args: args{
 				productCode: "",
