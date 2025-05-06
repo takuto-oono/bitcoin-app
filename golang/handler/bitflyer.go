@@ -3,8 +3,8 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 
-	"bitcoin-app/golang/config"
-	"bitcoin-app/golang/usecase"
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/usecase"
 )
 
 type IBitFlyerHandler interface {

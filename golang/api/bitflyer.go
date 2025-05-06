@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"bitcoin-app/golang/config"
+	"bitcoin-app-golang/config"
 )
 
 const BitFlyerBaseURL = "https://api.bitflyer.com"

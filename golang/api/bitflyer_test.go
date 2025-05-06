@@ -1,9 +1,10 @@
 package api
 
 import (
-	"bitcoin-app/golang/config"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/config"
 )
 
 const (
