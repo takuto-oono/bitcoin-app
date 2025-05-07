@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .models.ticker import Ticker
+from .serializers.ticker import TickerSerializer
 
-# Create your views here.
+
+class TickerViewSet(viewsets.ModelViewSet):
+    queryset = Ticker.objects.all()
+    serializer_class = TickerSerializer
