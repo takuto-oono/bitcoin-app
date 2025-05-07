@@ -1,6 +1,6 @@
 package usecase
 
-import "bitcoin-app/golang/config"
+import "bitcoin-app-golang/config"
 
 
 var TestConfig config.Config
