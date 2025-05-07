@@ -37,6 +37,7 @@ jobs:
         python -m pip install --upgrade pip
         cd python/drf
         pip install -r requirements.txt
+        pip install flake8
 
     - name: Create test environment file
       run: |
@@ -52,9 +53,24 @@ jobs:
         DB_NAME=mysql_api_local
         DB_USER=root
         DB_PASSWORD=
-        DB_HOST=localhost
+        DB_HOST=127.0.0.1
         DB_PORT=3306
         EOL
+
+    - name: Run flake8
+      run: |
+        cd python/drf
+        # 重大なエラーのみをチェック（構文エラーなど）
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # すべてのエラーをチェックするが、ビルドは失敗させない
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Run migrations
+      run: |
+        cd python/drf
+        python manage.py migrate
+      env:
+        DJANGO_ENV: development
 
     - name: Run tests
       run: |
