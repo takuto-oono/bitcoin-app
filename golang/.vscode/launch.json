@@ -6,7 +6,7 @@
       "type": "go",
       "request": "launch",
       "mode": "auto",
-      "program": "${workspaceFolder}/main.go",
+      "program": "${workspaceFolder}/cmd/server/main.go",
       "env": {},
       "args": ["-toml", "${workspaceFolder}/toml/local.toml", "-env", "${workspaceFolder}/env/.env.local"],
       "showLog": true
