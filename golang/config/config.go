@@ -18,8 +18,9 @@ func (c Credential) GoString() string {
 	return "************"
 }
 
-type GeneralSetting struct {
-	Port string `toml:"port"`
+type ServerURL struct {
+	GolangServer string `toml:"golangServer"`
+	DRFServer    string `toml:"drfServer"`
 }
 
 type BitFlyer struct {
@@ -28,7 +29,7 @@ type BitFlyer struct {
 }
 
 type Config struct {
-	GeneralSetting `toml:"general"`
+	ServerURL `toml:"serverURL"`
 	BitFlyer
 }
 
@@ -71,8 +72,12 @@ func (c *Config) mustCheck() error {
 		return errors.New("config is nil")
 	}
 
-	if c.GeneralSetting.Port == "" {
-		return errors.New("port is empty")
+	if c.ServerURL.GolangServer == "" {
+		return errors.New("golang server is empty")
+	}
+
+	if c.ServerURL.DRFServer == "" {
+		return errors.New("drf server is empty")
 	}
 
 	if c.BitFlyer.ApiKey == "" {

@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"bitcoin-app-golang/api"
 	"bitcoin-app-golang/config"
 	"bitcoin-app-golang/router"
 )
@@ -20,7 +21,12 @@ func main() {
 
 	router := router.NewRouter(cfg)
 
-	if err := router.Run(fmt.Sprintf(":%s", cfg.GeneralSetting.Port)); err != nil {
+	port, err := api.ExtractPort(cfg.ServerURL.GolangServer)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := router.Run(fmt.Sprintf(":%s", port)); err != nil {
 		panic(err)
 	}
 }

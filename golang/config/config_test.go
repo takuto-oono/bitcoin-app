@@ -28,8 +28,9 @@ func TestNewConfig(t *testing.T) {
 				envFilePath:  "../env/.env.test",
 			},
 			want: Config{
-				GeneralSetting: GeneralSetting{
-					Port: "8080",
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -45,8 +46,9 @@ func TestNewConfig(t *testing.T) {
 				envFilePath:  "../env/.env.test",
 			},
 			want: Config{
-				GeneralSetting: GeneralSetting{
-					Port: "7080",
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:7080",
+					DRFServer:    "http://localhost:7000",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -103,8 +105,9 @@ func TestConfig_setFromToml(t *testing.T) {
 				tomlFilePath: "../toml/local.toml",
 			},
 			want: Config{
-				GeneralSetting: GeneralSetting{
-					Port: "8080",
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
 				},
 				BitFlyer: BitFlyer{},
 			},
@@ -116,8 +119,9 @@ func TestConfig_setFromToml(t *testing.T) {
 				tomlFilePath: "../toml/prod.toml",
 			},
 			want: Config{
-				GeneralSetting: GeneralSetting{
-					Port: "7080",
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:7080",
+					DRFServer:    "http://localhost:7000",
 				},
 				BitFlyer: BitFlyer{},
 			},
@@ -161,7 +165,7 @@ func TestConfig_setFromEnv(t *testing.T) {
 				envFilePath: "../env/.env.test",
 			},
 			want: Config{
-				GeneralSetting: GeneralSetting{},
+				ServerURL: ServerURL{},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: TestBitFlyerAPISecret,
@@ -200,8 +204,9 @@ func TestConfig_mustCheck(t *testing.T) {
 		{
 			name: "success",
 			config: &Config{
-				GeneralSetting: GeneralSetting{
-					Port: "8080",
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -216,10 +221,24 @@ func TestConfig_mustCheck(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "fail port is empty",
+			name: "fail golang server is empty",
 			config: &Config{
-				GeneralSetting: GeneralSetting{
-					Port: "",
+				ServerURL: ServerURL{
+					GolangServer: "",
+				},
+				BitFlyer: BitFlyer{
+					ApiKey:    TestBitFlyerAPIKey,
+					ApiSecret: TestBitFlyerAPISecret,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "fail drf server is empty",
+			config: &Config{
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer: "",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -231,8 +250,9 @@ func TestConfig_mustCheck(t *testing.T) {
 		{
 			name: "fail bitflyer api key is empty",
 			config: &Config{
-				GeneralSetting: GeneralSetting{
-					Port: "8080",
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    "",
@@ -244,8 +264,9 @@ func TestConfig_mustCheck(t *testing.T) {
 		{
 			name: "fail bitflyer api secret is empty",
 			config: &Config{
-				GeneralSetting: GeneralSetting{
-					Port: "8080",
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,

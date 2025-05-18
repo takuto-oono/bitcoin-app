@@ -8,6 +8,8 @@ import (
 )
 
 type BitFlyerURL string
+type GolangServerURL string
+type DRFServerURL string
 
 func (b BitFlyerURL) GetTicker(productCode ProductCode) (string, error) {
 	qVal := url.Values{}
@@ -15,6 +17,19 @@ func (b BitFlyerURL) GetTicker(productCode ProductCode) (string, error) {
 		qVal.Set("product_code", string(productCode))
 	}
 	return createUrl(string(b), "v1/getticker", qVal)
+}
+
+func (g GolangServerURL) GetTicker(productCode ProductCode) (string, error) {
+	qVal := url.Values{}
+	if productCode != "" {
+		qVal.Set("product_code", string(productCode))
+	}
+	return createUrl(string(g), "/bitflyer/ticker", qVal)
+}
+
+func (d DRFServerURL) PostTicker() (string, error) {
+	qVal := url.Values{}
+	return createUrl(string(d), "/api/tickers", qVal)
 }
 
 func createUrl(baseUrl, p string, qVal url.Values, el ...string) (string, error) {
@@ -40,4 +55,15 @@ func withSuffixSlash(s string) string {
 		return s
 	}
 	return s + "/"
+}
+
+func ExtractPort(urlString string) (string, error) {
+	if urlString == "" {
+		return "", errors.New("url is empty")
+	}
+	u, err := url.Parse(urlString)
+	if err != nil {
+		return "", err
+	}
+	return u.Port(), nil
 }
