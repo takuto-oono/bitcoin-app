@@ -44,6 +44,78 @@ func TestBitFlyerURL_GetTicker(t *testing.T) {
 	}
 }
 
+func TestGolangServerURL_GetTicker(t *testing.T) {
+	type args struct {
+		productCode ProductCode
+	}
+	tests := []struct {
+		name    string
+		g       GolangServerURL
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "success",
+			g:    GolangServerURL("https://localhost:8080"),
+			args: args{
+				productCode: "BTC_JPY",
+			},
+			want:    "https://localhost:8080/bitflyer/ticker/?product_code=BTC_JPY",
+			wantErr: false,
+		},
+		{
+			name: "success productCode is empty",
+			g:    GolangServerURL("https://localhost:8080"),
+			args: args{
+				productCode: "",
+			},
+			want:    "https://localhost:8080/bitflyer/ticker/",
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.g.GetTicker(tt.args.productCode)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GolangServerURL.GetTicker() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("GolangServerURL.GetTicker() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDRFServerURL_PostTicker(t *testing.T) {
+	tests := []struct {
+		name    string
+		d       DRFServerURL
+		want    string
+		wantErr bool
+	}{
+		{
+			name:    "success",
+			d:       DRFServerURL("https://localhost:8080"),
+			want:    "https://localhost:8080/api/tickers/",
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.d.PostTicker()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DRFServerURL.PostTicker() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("DRFServerURL.PostTicker() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func Test_createUrl(t *testing.T) {
 	type args struct {
 		baseUrl string
@@ -126,6 +198,63 @@ func Test_withSuffixSlash(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := withSuffixSlash(tt.args.s); got != tt.want {
 				t.Errorf("withSuffixSlash() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestExtractPort(t *testing.T) {
+	type args struct {
+		urlString string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "success",
+			args: args{
+				urlString: "https://localhost:8080",
+			},
+			want:    "8080",
+			wantErr: false,
+		},
+		{
+			name: "url is empty",
+			args: args{
+				urlString: "",
+			},
+			want:    "",
+			wantErr: true,
+		},
+		{
+			name: "invalid url",
+			args: args{
+				urlString: "hogehogehogehoge",
+			},
+			want:    "",
+			wantErr: false,
+		},
+		{
+			name: "port is empty",
+			args: args{
+				urlString: "https://localhost",
+			},
+			want:    "",
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ExtractPort(tt.args.urlString)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ExtractPort() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("ExtractPort() = %v, want %v", got, tt.want)
 			}
 		})
 	}
