@@ -238,7 +238,7 @@ func TestConfig_mustCheck(t *testing.T) {
 			config: &Config{
 				ServerURL: ServerURL{
 					GolangServer: "http://localhost:8080",
-					DRFServer: "",
+					DRFServer:    "",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
