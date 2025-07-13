@@ -14,7 +14,8 @@ RUN apk add --no-cache \
     gcc \
     musl-dev \
     python3-dev \
-    make
+    make \
+    mariadb-client
 
 # requirements.txtをコピーして依存関係をインストール
 COPY requirements.txt .
