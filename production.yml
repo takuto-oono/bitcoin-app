@@ -18,8 +18,8 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
+      timeout: 1s
+      retries: 200
 
   drf:
     build:
