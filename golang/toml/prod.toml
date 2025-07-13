@@ -1,3 +1,3 @@
 [serverURL]
-golangServer="http://localhost:7080"
-drfServer="http://localhost:7000"
+golangServer="http://golang-server:7080"
+drfServer="http://drf:7000"

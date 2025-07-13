@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bitcoin-mysql-prod
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: bitcoin_app
+      MYSQL_USER: bitcoin_user
+      MYSQL_PASSWORD: bitcoin_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - bitcoin-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  drf:
+    build:
+      context: ./python/drf
+      dockerfile: Dockerfile
+    container_name: bitcoin-drf-prod
+    ports:
+      - "7000:7000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bitcoin-network
+    restart: unless-stopped
+
+  golang-server:
+    build:
+      context: ./golang
+      dockerfile: dockerfile/server.Dockerfile
+    container_name: bitcoin-golang-server-prod
+    ports:
+      - "7080:7080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bitcoin-network
+    restart: unless-stopped
+
+  ticker-batch:
+    build:
+      context: ./golang
+      dockerfile: dockerfile/ticker_batch.Dockerfile
+    container_name: bitcoin-ticker-batch-prod
+    depends_on:
+      mysql:
+        condition: service_healthy
+      golang-server:
+        condition: service_started
+      drf:
+        condition: service_started
+    networks:
+      - bitcoin-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  bitcoin-network:
+    driver: bridge
