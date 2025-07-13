@@ -1,5 +1,5 @@
 # ビルドステージ
-FROM golang:1.24.2-alpine AS builder
+FROM golang:1.24.4-alpine AS builder
 
 # 必要なビルドツールのインストール
 RUN apk add --no-cache git
