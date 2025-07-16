@@ -7,6 +7,7 @@ import (
 )
 
 type IDRFAPI interface {
+	GetBitFlyerTickers() ([]GetTickerFromDRFResponse, error)
 	PostBitFlyerTicker(ticker PostTickerDRFRequest) error
 }
 
@@ -20,6 +21,18 @@ func NewDRFAPI(cfg config.Config) IDRFAPI {
 		Config: cfg,
 		API:    NewAPI(),
 	}
+}
+
+func (d *DRFAPI) GetBitFlyerTickers() ([]GetTickerFromDRFResponse, error) {
+	url, err := DRFServerURL(d.Config.ServerURL.DRFServer).GetTickers()
+	if err != nil {
+		return nil, err
+	}
+	var tickers []GetTickerFromDRFResponse
+	if err := d.API.Do(http.MethodGet, nil, &tickers, url, nil); err != nil {
+		return nil, err
+	}
+	return tickers, nil
 }
 
 func (d *DRFAPI) PostBitFlyerTicker(ticker PostTickerDRFRequest) error {
