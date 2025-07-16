@@ -27,6 +27,10 @@ func (g GolangServerURL) GetTicker(productCode ProductCode) (string, error) {
 	return createUrl(string(g), "/bitflyer/ticker", qVal)
 }
 
+func (g DRFServerURL) GetTickers() (string, error) {
+	return createUrl(string(g), "/api/tickers", nil)
+}
+
 func (d DRFServerURL) PostTicker() (string, error) {
 	qVal := url.Values{}
 	return createUrl(string(d), "/api/tickers", qVal)
