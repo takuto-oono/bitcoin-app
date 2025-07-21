@@ -46,7 +46,14 @@ func runTickerBatch(ctx context.Context, golangServer api.IGolangServerAPI, drf 
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			getAndPostTicker(golangServer, drf)
+			go func() {
+				defer func() {
+					if r := recover(); r != nil {
+						log.Printf("Panic recovered in ticker case: %v", r)
+					}
+				}()
+				getAndPostTicker(golangServer, drf)
+			}()
 		}
 	}
 }
