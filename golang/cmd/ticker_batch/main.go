@@ -32,7 +32,10 @@ func main() {
 	drf := api.NewDRFAPI(cfg)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
+	defer func() {
+		stop()
+		log.Println("Shutting down gracefully...")
+	}()
 
 	runTickerBatch(ctx, golangServer, drf)
 }
