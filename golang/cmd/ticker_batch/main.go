@@ -32,7 +32,10 @@ func main() {
 	drf := api.NewDRFAPI(cfg)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
+	defer func() {
+		stop()
+		log.Println("Shutting down gracefully...")
+	}()
 
 	runTickerBatch(ctx, golangServer, drf)
 }
@@ -46,7 +49,14 @@ func runTickerBatch(ctx context.Context, golangServer api.IGolangServerAPI, drf 
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			getAndPostTicker(golangServer, drf)
+			go func() {
+				defer func() {
+					if r := recover(); r != nil {
+						log.Printf("Panic recovered in ticker case: %v", r)
+					}
+				}()
+				getAndPostTicker(golangServer, drf)
+			}()
 		}
 	}
 }
