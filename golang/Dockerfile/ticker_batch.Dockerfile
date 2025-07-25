@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ticker_batch ./cm
 # 本番用の軽量イメージ
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates musl-dev gcc
+RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 
 # ビルドしたバイナリをコピー
