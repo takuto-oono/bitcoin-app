@@ -47,8 +47,8 @@ func TestNewConfig(t *testing.T) {
 			},
 			want: Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://golang-server:7080",
-					DRFServer:    "http://drf:7000",
+					GolangServer: "http://golang-server:8080",
+					DRFServer:    "http://drf:8000",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -120,8 +120,8 @@ func TestConfig_setFromToml(t *testing.T) {
 			},
 			want: Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://golang-server:7080",
-					DRFServer:    "http://drf:7000",
+					GolangServer: "http://golang-server:8080",
+					DRFServer:    "http://drf:8000",
 				},
 				BitFlyer: BitFlyer{},
 			},
