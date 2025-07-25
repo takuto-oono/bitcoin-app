@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	TickerInterval     = 2 * time.Second
+	TickerInterval     = 1 * time.Second
 	DefaultProductCode = api.ProductCodeBTCJPY
 )
 
