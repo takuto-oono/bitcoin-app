@@ -18,13 +18,16 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ticker_batch ./cm
 # 本番用の軽量イメージ
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates musl-dev gcc
 WORKDIR /root/
 
 # ビルドしたバイナリをコピー
 COPY --from=builder /app/ticker_batch .
 COPY --from=builder /app/toml ./toml
 COPY --from=builder /app/env ./env
+
+# 環境変数を設定
+ENV GIN_MODE=release
 
 # 起動コマンド
 CMD ["./ticker_batch", "-toml", "toml/prod.toml", "-env", "env/.env.prod"]

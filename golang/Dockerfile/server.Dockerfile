@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server ./cmd/serv
 # 本番用の軽量イメージ
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates musl-dev gcc
 WORKDIR /root/
 
 # ビルドしたバイナリをコピー
@@ -27,7 +27,10 @@ COPY --from=builder /app/toml ./toml
 COPY --from=builder /app/env ./env
 
 # ポートを公開
-EXPOSE 7080
+EXPOSE 8080
+
+# 環境変数を設定
+ENV GIN_MODE=release
 
 # 起動コマンド
 CMD ["./server", "-toml", "toml/prod.toml", "-env", "env/.env.prod"]
