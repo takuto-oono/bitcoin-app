@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: bitcoin-drf-prod
     ports:
-      - "7000:7000"
+      - "9000:8000"
     depends_on:
       mysql:
         condition: service_healthy
@@ -41,7 +41,7 @@ services:
       dockerfile: dockerfile/server.Dockerfile
     container_name: bitcoin-golang-server-prod
     ports:
-      - "7080:7080"
+      - "7080:8080"
     depends_on:
       mysql:
         condition: service_healthy

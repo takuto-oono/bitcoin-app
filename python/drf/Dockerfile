@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # ポートを公開
-EXPOSE 7000
+EXPOSE 8000
 
 # 起動コマンド
-CMD ["gunicorn", "--bind", "0.0.0.0:7000", "mysql_api.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "mysql_api.wsgi:application"]

@@ -27,7 +27,10 @@ COPY --from=builder /app/toml ./toml
 COPY --from=builder /app/env ./env
 
 # ポートを公開
-EXPOSE 7080
+EXPOSE 8080
+
+# 環境変数を設定
+ENV GIN_MODE=release
 
 # 起動コマンド
 CMD ["./server", "-toml", "toml/prod.toml", "-env", "env/.env.prod"]

@@ -26,5 +26,8 @@ COPY --from=builder /app/ticker_batch .
 COPY --from=builder /app/toml ./toml
 COPY --from=builder /app/env ./env
 
+# 環境変数を設定
+ENV GIN_MODE=release
+
 # 起動コマンド
 CMD ["./ticker_batch", "-toml", "toml/prod.toml", "-env", "env/.env.prod"]
