@@ -5,15 +5,54 @@ on:
     branches: [ '*' ]
   pull_request:
 
+env:
+  PYTHON_VERSION: '3.13'
+  WORKING_DIRECTORY: python/drf
+  MYSQL_DATABASE: mysql_api_local
+  DJANGO_ENV: development
+
 jobs:
-  test:
+  flake8:
+    name: flake8
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8
+
+      - name: Run flake8
+        run: |
+          # 重大なエラーのみをチェック（構文エラーなど）
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # すべてのエラーをチェックするが、ビルドは失敗させない
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+  test:
+    name: Run migrations and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
     services:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_DATABASE: mysql_api_local
+          MYSQL_DATABASE: ${{ env.MYSQL_DATABASE }}
           MYSQL_ROOT_PASSWORD: ''
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
@@ -25,62 +64,53 @@ jobs:
           --health-retries=3
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.13'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        cd python/drf
-        pip install -r requirements.txt
-        pip install flake8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Create test environment file
-      run: |
-        cd python/drf
-        mkdir -p env/local
-        cat > env/local/.env << 'EOL'
-        # テスト環境用の設定
-        DEBUG=True
-        SECRET_KEY=django-insecure-b525gig#ci$vp0rg#$w95hzi^a8u7s2fldl93=7xf7s=j#8bhf
-        ALLOWED_HOSTS=localhost,127.0.0.1
+      - name: Create test environment file
+        run: |
+          mkdir -p env/local
+          cat > env/local/.env << 'EOL'
+          # テスト環境用の設定
+          DEBUG=True
+          SECRET_KEY=django-insecure-b525gig#ci$vp0rg#$w95hzi^a8u7s2fldl93=7xf7s=j#8bhf
+          ALLOWED_HOSTS=localhost,127.0.0.1
 
-        # データベース設定
-        DB_NAME=mysql_api_local
-        DB_USER=root
-        DB_PASSWORD=
-        DB_HOST=127.0.0.1
-        DB_PORT=3306
-        EOL
+          # データベース設定
+          DB_NAME=mysql_api_local
+          DB_USER=root
+          DB_PASSWORD=
+          DB_HOST=127.0.0.1
+          DB_PORT=3306
+          EOL
 
-    - name: Run flake8
-      run: |
-        cd python/drf
-        # 重大なエラーのみをチェック（構文エラーなど）
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # すべてのエラーをチェックするが、ビルドは失敗させない
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Run migrations
+        run: python manage.py migrate
+        env:
+          DJANGO_ENV: ${{ env.DJANGO_ENV }}
 
-    - name: Run migrations
-      run: |
-        cd python/drf
-        python manage.py migrate
-      env:
-        DJANGO_ENV: development
-
-    - name: Run tests
-      run: |
-        cd python/drf
-        python manage.py test
-      env:
-        DJANGO_ENV: development
+      - name: Run tests
+        run: python manage.py test
+        env:
+          DJANGO_ENV: ${{ env.DJANGO_ENV }}
 
   pip-audit:
+    name: pip-audit
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -88,16 +118,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install dependencies
         run: |
-          cd python/drf
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run pip-audit
         run: |
-          cd python/drf
           pip install pip-audit
           pip-audit
