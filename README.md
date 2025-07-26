@@ -48,6 +48,12 @@
 サーバー起動
 ```go run cmd/ticker_batch/main.go```
 
+mysqlへの接続
+```mysql -h localhost -P 3306 -u root mysql_api_local```
+
+prodのtickersテーブルの情報を開発環境にコピーする (結構時間がかかる)
+```cd ~/bitcoin-app/golang && go run cmd/import_tickers/main.go```
+
 
 ### prod環境
 
@@ -59,3 +65,7 @@
 
 ログ出力
 ```docker-compose -f production.yml logs -f```
+
+mysqlへの接続
+```docker exec -it bitcoin-mysql-prod bash``` &&
+```mysql -h mysql -P 3306 -u bitcoin_user -p bitcoin_app``` (passは`bitcoin_password`)

@@ -68,7 +68,7 @@ func getAndPostTicker(golangServer api.IGolangServerAPI, drf api.IDRFAPI) {
 		return
 	}
 
-	drfTicker := api.ConvertTicker(ticker)
+	drfTicker := api.ConvertTickerFromGolang(ticker)
 	if err := drf.PostBitFlyerTicker(drfTicker); err != nil {
 		log.Printf("Error posting ticker: %v", err)
 		return

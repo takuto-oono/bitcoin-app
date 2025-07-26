@@ -259,3 +259,92 @@ func TestExtractPort(t *testing.T) {
 		})
 	}
 }
+
+func TestDRFServerURL_GetTickers(t *testing.T) {
+	tests := []struct {
+		name    string
+		g       DRFServerURL
+		want    string
+		wantErr bool
+	}{
+		{
+			name:    "success",
+			g:       DRFServerURL("https://localhost:8080"),
+			want:    "https://localhost:8080/api/tickers/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different port",
+			g:       DRFServerURL("https://localhost:3000"),
+			want:    "https://localhost:3000/api/tickers/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different host",
+			g:       DRFServerURL("https://api.example.com"),
+			want:    "https://api.example.com/api/tickers/",
+			wantErr: false,
+		},
+		{
+			name:    "success with trailing slash",
+			g:       DRFServerURL("https://localhost:8080/"),
+			want:    "https://localhost:8080/api/tickers/",
+			wantErr: false,
+		},
+		{
+			name:    "error empty base URL",
+			g:       DRFServerURL(""),
+			want:    "",
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.g.GetTickers()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DRFServerURL.GetTickers() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("DRFServerURL.GetTickers() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDRFServerURL_DeleteTicker(t *testing.T) {
+	tests := []struct {
+		name    string
+		g       DRFServerURL
+		id      int
+		want    string
+		wantErr bool
+	}{
+		{
+			name:    "success",
+			g:       DRFServerURL("https://localhost:8080"),
+			id:      123,
+			want:    "https://localhost:8080/api/tickers/123/",
+			wantErr: false,
+		},
+		{
+			name:    "error invalid ID",
+			g:       DRFServerURL("https://localhost:8080"),
+			id:      -1,
+			want:    "",
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.g.DeleteTicker(tt.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DRFServerURL.DeleteTicker() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("DRFServerURL.DeleteTicker() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
