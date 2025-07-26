@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/url"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -27,9 +28,20 @@ func (g GolangServerURL) GetTicker(productCode ProductCode) (string, error) {
 	return createUrl(string(g), "/bitflyer/ticker", qVal)
 }
 
+func (g DRFServerURL) GetTickers() (string, error) {
+	return createUrl(string(g), "/api/tickers", nil)
+}
+
 func (d DRFServerURL) PostTicker() (string, error) {
 	qVal := url.Values{}
 	return createUrl(string(d), "/api/tickers", qVal)
+}
+func (d DRFServerURL) DeleteTicker(id int) (string, error) {
+	if id <= 0 {
+		return "", errors.New("invalid ticker ID")
+	}
+
+	return createUrl(string(d), "/api/tickers", nil, strconv.Itoa(id))
 }
 
 func createUrl(baseUrl, p string, qVal url.Values, el ...string) (string, error) {
