@@ -57,7 +57,16 @@ prodのtickersテーブルの情報を開発環境にコピーする (結構時�
 
 ### prod環境
 
-再起動
+golangサーバの再起動
+```cd ~/bitcoin-app && sh restart-golang-server.sh```
+
+drfの再起動
+```cd ~/bitcoin-app && sh restart-drf.sh```
+
+ticker-batchの再起動
+```cd ~/bitcoin-app && sh restart-ticker-batch.sh```
+
+すべてのサービスの再起動
 ```docker-compose -f production.yml build --no-cache && docker-compose -f production.yml down && docker-compose -f production.yml up -d```
 
 初回起動
