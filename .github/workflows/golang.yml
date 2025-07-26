@@ -107,3 +107,39 @@ jobs:
 
       - name: Run tests
         run: go test -v ./...
+
+  docker-build-server:
+    name: Docker Build Test - Server
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build server Docker image
+        run: |
+          docker build -f Dockerfile/server.Dockerfile -t golang-server:test .
+
+  docker-build-ticker-batch:
+    name: Docker Build Test - Ticker Batch
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ticker batch Docker image
+        run: |
+          docker build -f Dockerfile/ticker_batch.Dockerfile -t golang-ticker-batch:test .
