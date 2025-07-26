@@ -5,13 +5,17 @@ on:
     branches: [ '*' ]
   pull_request:
 
+env:
+  GO_VERSION: '1.24.4'
+  WORKING_DIRECTORY: ./golang
+
 jobs:
   golangci-lint:
     name: golangci-lint
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./golang
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
     steps:
       - name: Checkout code
@@ -20,7 +24,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24.4'
+          go-version: ${{ env.GO_VERSION }}
           cache: true
 
       - name: Install dependencies
@@ -36,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./golang
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
     steps:
       - name: Checkout code
@@ -45,7 +49,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24.4'
+          go-version: ${{ env.GO_VERSION }}
           cache: true
 
       - name: Install dependencies
@@ -61,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./golang
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
     steps:
       - name: Checkout code
@@ -70,7 +74,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24.4'
+          go-version: ${{ env.GO_VERSION }}
           cache: true
 
       - name: Install dependencies
@@ -86,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./golang
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
     steps:
       - name: Checkout code
@@ -95,7 +99,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24.4'
+          go-version: ${{ env.GO_VERSION }}
           cache: true
 
       - name: Install dependencies
