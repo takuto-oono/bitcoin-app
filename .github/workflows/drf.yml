@@ -36,10 +36,8 @@ jobs:
 
       - name: Run flake8
         run: |
-          # 重大なエラーのみをチェック（構文エラーなど）
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # すべてのエラーをチェックするが、ビルドは失敗させない
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          # flake8チェックを実行（設定ファイルの設定を使用）
+          flake8 . --count --show-source --statistics
 
   test:
     name: Run migrations and tests
