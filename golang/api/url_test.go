@@ -44,6 +44,32 @@ func TestBitFlyerURL_GetTicker(t *testing.T) {
 	}
 }
 
+func TestBitFlyerURL_SendChildOrder(t *testing.T) {
+	tests := []struct {
+		name    string
+		want    string
+		wantErr bool
+	}{
+		{
+			name:    "success",
+			want:    "https://api.bitflyer.com/v1/me/sendchildorder/",
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := BitFlyerURL(BitFlyerBaseURL).SendChildOrder()
+			if err != nil {
+				t.Errorf("BitFlyerURL.SendChildOrder() error = %v", err)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("BitFlyerURL.SendChildOrder() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestGolangServerURL_GetTicker(t *testing.T) {
 	type args struct {
 		productCode ProductCode

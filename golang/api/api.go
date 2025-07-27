@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bitcoin-app-golang/config"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -16,13 +17,13 @@ func NewAPI() *API {
 	return &API{}
 }
 
-func (api *API) Do(method string, reqModel, resModel any, url string, headers map[string]string) error {
+func (api *API) Do(method string, reqModel, resModel any, url string, headerMap map[string]any) error {
 	reqJson, err := marshalJson(reqModel)
 	if err != nil {
 		return err
 	}
 
-	res, err := request(method, url, reqJson, headers)
+	res, err := request(method, url, reqJson, convertToStringMap(headerMap))
 	if err != nil {
 		return err
 	}
@@ -81,4 +82,20 @@ func marshalJson(v any) ([]byte, error) {
 		return []byte{}, nil
 	}
 	return json.Marshal(v)
+}
+
+func convertToStringMap(m map[string]any) map[string]string {
+	if m == nil {
+		return nil
+	}
+	stringMap := make(map[string]string, len(m))
+	for k, v := range m {
+		switch val := v.(type) {
+		case string:
+			stringMap[k] = val
+		case config.Credential:
+			stringMap[k] = string(val)
+		}
+	}
+	return stringMap
 }
