@@ -36,6 +36,9 @@ func TestNewConfig(t *testing.T) {
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: TestBitFlyerAPISecret,
 				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
 			},
 			wantErr: false,
 		},
@@ -53,6 +56,9 @@ func TestNewConfig(t *testing.T) {
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: TestBitFlyerAPISecret,
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 1,
 				},
 			},
 			wantErr: false,
@@ -110,6 +116,9 @@ func TestConfig_setFromToml(t *testing.T) {
 					DRFServer:    "http://localhost:8000",
 				},
 				BitFlyer: BitFlyer{},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
 			},
 			wantErr: false,
 		},
@@ -124,6 +133,9 @@ func TestConfig_setFromToml(t *testing.T) {
 					DRFServer:    "http://drf:8000",
 				},
 				BitFlyer: BitFlyer{},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 1,
+				},
 			},
 			wantErr: false,
 		},
@@ -212,6 +224,9 @@ func TestConfig_mustCheck(t *testing.T) {
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: TestBitFlyerAPISecret,
 				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
 			},
 			wantErr: false,
 		},
@@ -230,6 +245,9 @@ func TestConfig_mustCheck(t *testing.T) {
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: TestBitFlyerAPISecret,
 				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
 			},
 			wantErr: true,
 		},
@@ -243,6 +261,9 @@ func TestConfig_mustCheck(t *testing.T) {
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: TestBitFlyerAPISecret,
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
 				},
 			},
 			wantErr: true,
@@ -258,6 +279,9 @@ func TestConfig_mustCheck(t *testing.T) {
 					ApiKey:    "",
 					ApiSecret: TestBitFlyerAPISecret,
 				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
 			},
 			wantErr: true,
 		},
@@ -271,6 +295,26 @@ func TestConfig_mustCheck(t *testing.T) {
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: "",
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "fail ticker batch interval is less than or equal to 0",
+			config: &Config{
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
+				},
+				BitFlyer: BitFlyer{
+					ApiKey:    TestBitFlyerAPIKey,
+					ApiSecret: TestBitFlyerAPISecret,
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 0,
 				},
 			},
 			wantErr: true,

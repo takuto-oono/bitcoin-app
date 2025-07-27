@@ -28,9 +28,14 @@ type BitFlyer struct {
 	ApiSecret Credential
 }
 
+type TickerBatch struct {
+	BatchIntervalSec int `toml:"batchIntervalSec"`
+}
+
 type Config struct {
 	ServerURL `toml:"serverURL"`
 	BitFlyer
+	TickerBatch `toml:"tickerBatch"`
 }
 
 func NewConfig(tomlFilePath, envFilePath string) (Config, error) {
@@ -86,6 +91,10 @@ func (c *Config) mustCheck() error {
 
 	if c.BitFlyer.ApiSecret == "" {
 		return errors.New("bitflyer api secret is empty")
+	}
+
+	if c.TickerBatch.BatchIntervalSec <= 0 {
+		return errors.New("ticker batch interval must be greater than 0")
 	}
 
 	return nil
