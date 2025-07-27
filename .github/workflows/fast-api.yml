@@ -1,0 +1,135 @@
+name: FastAPI
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+
+env:
+  PYTHON_VERSION: '3.13'
+  WORKING_DIRECTORY: python/fast_api
+
+jobs:
+  flake8:
+    name: flake8
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run flake8
+        run: |
+          # flake8チェックを実行（設定ファイルの設定を使用）
+          flake8 . --count --show-source --statistics
+
+  test:
+    name: Basic FastAPI validation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate FastAPI application
+        run: |
+          # FastAPIアプリケーションが正常にインポートできるかチェック
+          python -c "
+          import sys
+          sys.path.append('.')
+          from main import app
+          print('FastAPI application imported successfully!')
+          "
+
+  pip-audit:
+    name: pip-audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pip-audit
+        run: |
+          pip install pip-audit
+          pip-audit
+
+  docker-build:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create production environment file for Docker build
+        run: |
+          mkdir -p env
+          cat > env/.env.prod << 'EOL'
+          # 本番環境用の設定（Docker用）
+          HOST=0.0.0.0
+          PORT=8001
+          RELOAD=false
+          EOL
+
+      - name: Build Docker image
+        run: |
+          docker build -t fastapi-app:test .
+
+      - name: Test Docker container
+        run: |
+          # Dockerコンテナが正常に起動するかテスト
+          docker run -d --name fastapi-test -p 8001:8001 fastapi-app:test
+          sleep 5
+          
+          # ヘルスチェック
+          curl -f http://localhost:8001/ || exit 1
+          
+          # コンテナを停止・削除
+          docker stop fastapi-test
+          docker rm fastapi-test
