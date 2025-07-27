@@ -30,7 +30,7 @@ func Test_marshalJson(t *testing.T) {
 		{
 			name: "Test marshalJson",
 			args: args{
-				v: map[string]interface{}{
+				v: map[string]any{
 					"key": "value",
 				},
 			},
@@ -56,7 +56,7 @@ func Test_marshalJson(t *testing.T) {
 		{
 			name: "Test marshalJson is emptm map",
 			args: args{
-				v: map[string]interface{}{},
+				v: map[string]any{},
 			},
 			want:    []byte("{}"),
 			wantErr: false,

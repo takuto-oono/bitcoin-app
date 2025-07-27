@@ -7,7 +7,7 @@ import (
 )
 
 type IGolangServerAPI interface {
-	GetBitFlyerTicker(productCode ProductCode) (TickerFromGolangServer, error)
+	GetBitFlyerTicker(productCode string) (TickerFromGolangServer, error)
 }
 
 type GolangServerAPI struct {
@@ -22,7 +22,7 @@ func NewGolangServerAPI(cfg config.Config) IGolangServerAPI {
 	}
 }
 
-func (g *GolangServerAPI) GetBitFlyerTicker(productCode ProductCode) (TickerFromGolangServer, error) {
+func (g *GolangServerAPI) GetBitFlyerTicker(productCode string) (TickerFromGolangServer, error) {
 	url, err := GolangServerURL(g.Config.ServerURL.GolangServer).GetTicker(productCode)
 	if err != nil {
 		return TickerFromGolangServer{}, err

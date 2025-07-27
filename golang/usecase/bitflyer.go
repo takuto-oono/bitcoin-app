@@ -10,6 +10,16 @@ import (
 )
 
 const (
+	ProductCodeBTCJPY  = "BTC_JPY"
+	ProductCodeXRPJPY  = "XRP_JPY"
+	ProductCodeETHJPY  = "ETH_JPY"
+	ProductCodeXLMJPY  = "XLM_JPY"
+	ProductCodeMONAJPY = "MONA_JPY"
+
+	ProductCodeETHBTC   = "ETH_BTC"
+	ProductCodeBCHBTC   = "BCH_BTC"
+	ProductCodeFXBTCJPY = "FX_BTC_JPY"
+
 	ChildOrderTypeLimit  ChildOrderType = "LIMIT"
 	ChildOrderTypeMarket ChildOrderType = "MARKET"
 
@@ -31,7 +41,7 @@ type IBitFlyerUsecase interface {
 }
 
 type BuyOrderDTO struct {
-	ProductCode    string         `json:"product_code"`
+	ProductCode    ProductCode    `json:"product_code"`
 	ChildOrderType ChildOrderType `json:"child_order_type"`
 	Price          float64        `json:"price"`
 	Size           float64        `json:"size"`
@@ -41,7 +51,7 @@ type BuyOrderDTO struct {
 }
 
 type SellOrderDTO struct {
-	ProductCode    string         `json:"product_code"`
+	ProductCode    ProductCode    `json:"product_code"`
 	ChildOrderType ChildOrderType `json:"child_order_type"`
 	Price          float64        `json:"price"`
 	Size           float64        `json:"size"`
@@ -63,12 +73,12 @@ func NewBitFlyerUsecase(cfg config.Config) IBitFlyerUsecase {
 }
 
 func (b *BitFlyerUsecase) GetTicker(productCode string) (api.TickerFromBitFlyer, int, error) {
-	pc, err := api.NewProductCode(productCode)
+	pc, err := NewProductCode(productCode)
 	if err != nil {
 		return api.TickerFromBitFlyer{}, http.StatusBadRequest, err
 	}
 
-	res, err := b.BitFlyerAPI.GetTicker(pc)
+	res, err := b.BitFlyerAPI.GetTicker(string(pc))
 	if err != nil {
 		return api.TickerFromBitFlyer{}, http.StatusInternalServerError, err
 	}
@@ -77,24 +87,12 @@ func (b *BitFlyerUsecase) GetTicker(productCode string) (api.TickerFromBitFlyer,
 }
 
 func (b *BitFlyerUsecase) BuyOrder(dto BuyOrderDTO) (api.SendChildOrderResponse, int, error) {
-	if err := dto.ChildOrderType.validate(); err != nil {
+	if err := validateBuyOrSellOrder(dto); err != nil {
 		return api.SendChildOrderResponse{}, http.StatusBadRequest, err
-	}
-
-	if err := dto.TimeInForce.validate(); err != nil {
-		return api.SendChildOrderResponse{}, http.StatusBadRequest, err
-	}
-
-	if err := dto.MinuteToExpire.validate(); err != nil {
-		return api.SendChildOrderResponse{}, http.StatusBadRequest, err
-	}
-
-	if dto.ChildOrderType == ChildOrderTypeLimit && dto.Price <= 0 {
-		return api.SendChildOrderResponse{}, http.StatusBadRequest, errors.New("price must be greater than 0 for LIMIT orders")
 	}
 
 	args := api.SendChildOrderRequest{
-		ProductCode:    api.ProductCode(dto.ProductCode),
+		ProductCode:    string(dto.ProductCode),
 		ChildOrderType: string(dto.ChildOrderType),
 		Side:           SideBuy,
 		Price:          dto.Price,
@@ -112,20 +110,12 @@ func (b *BitFlyerUsecase) BuyOrder(dto BuyOrderDTO) (api.SendChildOrderResponse,
 }
 
 func (b *BitFlyerUsecase) SellOrder(dto SellOrderDTO) (api.SendChildOrderResponse, int, error) {
-	if err := dto.ChildOrderType.validate(); err != nil {
+	if err := validateBuyOrSellOrder(dto); err != nil {
 		return api.SendChildOrderResponse{}, http.StatusBadRequest, err
-	}
-
-	if err := dto.TimeInForce.validate(); err != nil {
-		return api.SendChildOrderResponse{}, http.StatusBadRequest, err
-	}
-
-	if dto.ChildOrderType == ChildOrderTypeLimit && dto.Price <= 0 {
-		return api.SendChildOrderResponse{}, http.StatusBadRequest, errors.New("price must be greater than 0 for LIMIT orders")
 	}
 
 	args := api.SendChildOrderRequest{
-		ProductCode:    api.ProductCode(dto.ProductCode),
+		ProductCode:    string(dto.ProductCode),
 		ChildOrderType: string(dto.ChildOrderType),
 		Side:           SideSell,
 		Price:          dto.Price,
@@ -140,6 +130,66 @@ func (b *BitFlyerUsecase) SellOrder(dto SellOrderDTO) (api.SendChildOrderRespons
 	}
 
 	return res, http.StatusOK, nil
+}
+
+func validateBuyOrSellOrder(dto any) error {
+	switch v := dto.(type) {
+	case BuyOrderDTO:
+		if err := v.ProductCode.validate(); err != nil {
+			return err
+		}
+		if err := v.ChildOrderType.validate(); err != nil {
+			return err
+		}
+		if err := v.TimeInForce.validate(); err != nil {
+			return err
+		}
+		if err := v.MinuteToExpire.validate(); err != nil {
+			return err
+		}
+		if v.ChildOrderType == ChildOrderTypeLimit && v.Price <= 0 {
+			return errors.New("price must be greater than 0 for LIMIT orders")
+		}
+	case SellOrderDTO:
+		if err := v.ProductCode.validate(); err != nil {
+			return err
+		}
+		if err := v.ChildOrderType.validate(); err != nil {
+			return err
+		}
+		if err := v.TimeInForce.validate(); err != nil {
+			return err
+		}
+		if err := v.MinuteToExpire.validate(); err != nil {
+			return err
+		}
+		if v.ChildOrderType == ChildOrderTypeLimit && v.Price <= 0 {
+			return errors.New("price must be greater than 0 for LIMIT orders")
+		}
+	default:
+		return fmt.Errorf("unsupported order type: %T", dto)
+	}
+	return nil
+}
+
+type ProductCode string
+
+func (p ProductCode) validate() error {
+	switch p {
+	case ProductCodeBTCJPY, ProductCodeXRPJPY, ProductCodeETHJPY, ProductCodeXLMJPY, ProductCodeMONAJPY,
+		ProductCodeETHBTC, ProductCodeBCHBTC, ProductCodeFXBTCJPY:
+		return nil
+	default:
+		return fmt.Errorf("invalid product code: %s", p)
+	}
+}
+
+func NewProductCode(code string) (ProductCode, error) {
+	pc := ProductCode(code)
+	if err := pc.validate(); err != nil {
+		return "", err
+	}
+	return pc, nil
 }
 
 type ChildOrderType string

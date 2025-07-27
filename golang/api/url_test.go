@@ -7,7 +7,7 @@ import (
 
 func TestBitFlyerURL_GetTicker(t *testing.T) {
 	type args struct {
-		productCode ProductCode
+		productCode string
 	}
 	tests := []struct {
 		name    string
@@ -72,7 +72,7 @@ func TestBitFlyerURL_SendChildOrder(t *testing.T) {
 
 func TestGolangServerURL_GetTicker(t *testing.T) {
 	type args struct {
-		productCode ProductCode
+		productCode string
 	}
 	tests := []struct {
 		name    string

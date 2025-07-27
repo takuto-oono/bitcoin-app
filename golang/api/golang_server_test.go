@@ -35,7 +35,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 		API    *API
 	}
 	type args struct {
-		productCode ProductCode
+		productCode string
 	}
 
 	tests := []struct {
@@ -70,7 +70,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 				API: NewAPI(),
 			},
 			args: args{
-				productCode: ProductCode(ProductCodeBTCJPY),
+				productCode: "BTC_JPY",
 			},
 			want:    mockTicker,
 			wantErr: false,
@@ -99,7 +99,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 				API: NewAPI(),
 			},
 			args: args{
-				productCode: ProductCode(ProductCodeETHJPY),
+				productCode: "ETH_JPY",
 			},
 			want:    mockTicker,
 			wantErr: false,
@@ -116,7 +116,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 				API: NewAPI(),
 			},
 			args: args{
-				productCode: ProductCode(ProductCodeBTCJPY),
+				productCode: "BTC_JPY",
 			},
 			want:    TickerFromGolangServer{},
 			wantErr: true,
@@ -136,7 +136,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 				API: NewAPI(),
 			},
 			args: args{
-				productCode: ProductCode("INVALID_CODE"),
+				productCode: "INVALID_CODE", // 無効なProductCode
 			},
 			want:    TickerFromGolangServer{},
 			wantErr: true,

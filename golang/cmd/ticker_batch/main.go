@@ -11,11 +11,12 @@ import (
 
 	"bitcoin-app-golang/api"
 	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/usecase"
 )
 
 const (
 	TickerInterval     = 1 * time.Second
-	DefaultProductCode = api.ProductCodeBTCJPY
+	DefaultProductCode = usecase.ProductCodeBTCJPY
 )
 
 func main() {
@@ -64,7 +65,7 @@ func runTickerBatch(ctx context.Context, golangServer api.IGolangServerAPI, drf 
 }
 
 func getAndPostTicker(golangServer api.IGolangServerAPI, drf api.IDRFAPI) {
-	ticker, err := golangServer.GetBitFlyerTicker(api.ProductCode(DefaultProductCode))
+	ticker, err := golangServer.GetBitFlyerTicker(DefaultProductCode)
 	if err != nil {
 		log.Printf("Error fetching ticker: %v", err)
 		return
