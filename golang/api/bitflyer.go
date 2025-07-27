@@ -17,7 +17,7 @@ import (
 const BitFlyerBaseURL = "https://api.bitflyer.com"
 
 type IBitFlyerAPI interface {
-	GetTicker(ProductCode) (TickerFromBitFlyer, error)
+	GetTicker(string) (TickerFromBitFlyer, error)
 	SendChildOrder(SendChildOrderRequest, bool) (SendChildOrderResponse, error)
 }
 
@@ -33,7 +33,7 @@ func NewBitFlyerAPI(cfg config.Config) IBitFlyerAPI {
 	}
 }
 
-func (b *BitFlyerAPI) GetTicker(productCode ProductCode) (TickerFromBitFlyer, error) {
+func (b *BitFlyerAPI) GetTicker(productCode string) (TickerFromBitFlyer, error) {
 	url, err := BitFlyerURL(BitFlyerBaseURL).GetTicker(productCode)
 	if err != nil {
 		return TickerFromBitFlyer{}, err

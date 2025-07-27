@@ -572,3 +572,216 @@ func TestMinuteToExpire_validate(t *testing.T) {
 		})
 	}
 }
+
+func TestProductCode_validate(t *testing.T) {
+	tests := []struct {
+		name    string
+		p       ProductCode
+		wantErr bool
+	}{
+		{
+			name:    "valid BTC_JPY",
+			p:       ProductCodeBTCJPY,
+			wantErr: false,
+		},
+		{
+			name:    "valid XRP_JPY",
+			p:       ProductCodeXRPJPY,
+			wantErr: false,
+		},
+		{
+			name:    "valid ETH_JPY",
+			p:       ProductCodeETHJPY,
+			wantErr: false,
+		},
+		{
+			name:    "valid XLM_JPY",
+			p:       ProductCodeXLMJPY,
+			wantErr: false,
+		},
+		{
+			name:    "valid MONA_JPY",
+			p:       ProductCodeMONAJPY,
+			wantErr: false,
+		},
+		{
+			name:    "valid ETH_BTC",
+			p:       ProductCodeETHBTC,
+			wantErr: false,
+		},
+		{
+			name:    "valid BCH_BTC",
+			p:       ProductCodeBCHBTC,
+			wantErr: false,
+		},
+		{
+			name:    "valid FX_BTC_JPY",
+			p:       ProductCodeFXBTCJPY,
+			wantErr: false,
+		},
+		{
+			name:    "invalid product code",
+			p:       ProductCode("INVALID_CODE"),
+			wantErr: true,
+		},
+		{
+			name:    "empty product code",
+			p:       ProductCode(""),
+			wantErr: true,
+		},
+		{
+			name:    "lowercase product code",
+			p:       ProductCode("btc_jpy"),
+			wantErr: true,
+		},
+		{
+			name:    "partial product code",
+			p:       ProductCode("BTC"),
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := tt.p.validate(); (err != nil) != tt.wantErr {
+				t.Errorf("ProductCode.validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestNewProductCode(t *testing.T) {
+	type args struct {
+		code string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    ProductCode
+		wantErr bool
+	}{
+		{
+			name: "valid BTC_JPY",
+			args: args{
+				code: "BTC_JPY",
+			},
+			want:    ProductCodeBTCJPY,
+			wantErr: false,
+		},
+		{
+			name: "valid XRP_JPY",
+			args: args{
+				code: "XRP_JPY",
+			},
+			want:    ProductCodeXRPJPY,
+			wantErr: false,
+		},
+		{
+			name: "valid ETH_JPY",
+			args: args{
+				code: "ETH_JPY",
+			},
+			want:    ProductCodeETHJPY,
+			wantErr: false,
+		},
+		{
+			name: "valid XLM_JPY",
+			args: args{
+				code: "XLM_JPY",
+			},
+			want:    ProductCodeXLMJPY,
+			wantErr: false,
+		},
+		{
+			name: "valid MONA_JPY",
+			args: args{
+				code: "MONA_JPY",
+			},
+			want:    ProductCodeMONAJPY,
+			wantErr: false,
+		},
+		{
+			name: "valid ETH_BTC",
+			args: args{
+				code: "ETH_BTC",
+			},
+			want:    ProductCodeETHBTC,
+			wantErr: false,
+		},
+		{
+			name: "valid BCH_BTC",
+			args: args{
+				code: "BCH_BTC",
+			},
+			want:    ProductCodeBCHBTC,
+			wantErr: false,
+		},
+		{
+			name: "valid FX_BTC_JPY",
+			args: args{
+				code: "FX_BTC_JPY",
+			},
+			want:    ProductCodeFXBTCJPY,
+			wantErr: false,
+		},
+		{
+			name: "invalid product code",
+			args: args{
+				code: "INVALID_CODE",
+			},
+			want:    ProductCode(""),
+			wantErr: true,
+		},
+		{
+			name: "empty product code",
+			args: args{
+				code: "",
+			},
+			want:    ProductCode(""),
+			wantErr: true,
+		},
+		{
+			name: "lowercase product code",
+			args: args{
+				code: "btc_jpy",
+			},
+			want:    ProductCode(""),
+			wantErr: true,
+		},
+		{
+			name: "partial product code",
+			args: args{
+				code: "BTC",
+			},
+			want:    ProductCode(""),
+			wantErr: true,
+		},
+		{
+			name: "product code with spaces",
+			args: args{
+				code: " BTC_JPY ",
+			},
+			want:    ProductCode(""),
+			wantErr: true,
+		},
+		{
+			name: "mixed case product code",
+			args: args{
+				code: "Btc_Jpy",
+			},
+			want:    ProductCode(""),
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewProductCode(tt.args.code)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewProductCode() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("NewProductCode() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

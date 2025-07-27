@@ -12,10 +12,10 @@ type BitFlyerURL string
 type GolangServerURL string
 type DRFServerURL string
 
-func (b BitFlyerURL) GetTicker(productCode ProductCode) (string, error) {
+func (b BitFlyerURL) GetTicker(productCode string) (string, error) {
 	qVal := url.Values{}
 	if productCode != "" {
-		qVal.Set("product_code", string(productCode))
+		qVal.Set("product_code", productCode)
 	}
 	return createUrl(string(b), "v1/getticker", qVal)
 }
@@ -24,10 +24,10 @@ func (b BitFlyerURL) SendChildOrder() (string, error) {
 	return createUrl(string(b), "v1/me/sendchildorder", nil)
 }
 
-func (g GolangServerURL) GetTicker(productCode ProductCode) (string, error) {
+func (g GolangServerURL) GetTicker(productCode string) (string, error) {
 	qVal := url.Values{}
 	if productCode != "" {
-		qVal.Set("product_code", string(productCode))
+		qVal.Set("product_code", productCode)
 	}
 	return createUrl(string(g), "/bitflyer/ticker", qVal)
 }

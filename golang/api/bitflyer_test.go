@@ -41,7 +41,7 @@ func TestBitFlyerAPI_GetTicker(t *testing.T) {
 		API    *API
 	}
 	type args struct {
-		productCode ProductCode
+		productCode string
 	}
 	tests := []struct {
 		name          string
@@ -60,7 +60,7 @@ func TestBitFlyerAPI_GetTicker(t *testing.T) {
 				productCode: "BTC_JPY",
 			},
 			wantCheckFunc: func(want TickerFromBitFlyer) bool {
-				return want.TickID > 0 && want.ProductCode == ProductCodeBTCJPY
+				return want.TickID > 0 && want.ProductCode == "BTC_JPY"
 			},
 			wantErr: false,
 		},
@@ -74,7 +74,7 @@ func TestBitFlyerAPI_GetTicker(t *testing.T) {
 				productCode: "",
 			},
 			wantCheckFunc: func(want TickerFromBitFlyer) bool {
-				return want.TickID > 0 && want.ProductCode == ProductCodeBTCJPY
+				return want.TickID > 0 && want.ProductCode == "BTC_JPY"
 			},
 			wantErr: false,
 		},
@@ -120,7 +120,7 @@ func TestBitFlyerAPI_SendChildOrder(t *testing.T) {
 			},
 			args: args{
 				args: SendChildOrderRequest{
-					ProductCode:    ProductCodeBTCJPY,
+					ProductCode:    "BTC_JPY",
 					ChildOrderType: "LIMIT",
 					Side:           "BUY",
 					Price:          1000000,
@@ -140,7 +140,7 @@ func TestBitFlyerAPI_SendChildOrder(t *testing.T) {
 			},
 			args: args{
 				args: SendChildOrderRequest{
-					ProductCode:    ProductCodeBTCJPY,
+					ProductCode:    "BTC_JPY",
 					ChildOrderType: "MARKET",
 					Side:           "SELL",
 					Size:           0.01,
@@ -159,7 +159,7 @@ func TestBitFlyerAPI_SendChildOrder(t *testing.T) {
 			},
 			args: args{
 				args: SendChildOrderRequest{
-					ProductCode:    ProductCodeETHJPY,
+					ProductCode:    "ETH_JPY",
 					ChildOrderType: "LIMIT",
 					Side:           "BUY",
 					Price:          500000,
