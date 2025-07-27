@@ -12,9 +12,6 @@ const (
 	prodDRFServerURL  = "http://localhost:9000"
 	localDRFServerURL = "http://localhost:8000"
 
-	prodGolangServerURL  = "http://localhost:9080"
-	localGolangServerURL = "http://localhost:8080"
-
 	postProcessNum   = 10
 	deleteProcessNum = 10
 )
@@ -61,8 +58,7 @@ func main() {
 func getProdConfig() config.Config {
 	return config.Config{
 		ServerURL: config.ServerURL{
-			DRFServer:    prodDRFServerURL,
-			GolangServer: prodGolangServerURL,
+			DRFServer: prodDRFServerURL,
 		},
 	}
 }
@@ -70,8 +66,7 @@ func getProdConfig() config.Config {
 func getLocalConfig() config.Config {
 	return config.Config{
 		ServerURL: config.ServerURL{
-			DRFServer:    localDRFServerURL,
-			GolangServer: localGolangServerURL,
+			DRFServer: localDRFServerURL,
 		},
 	}
 }
