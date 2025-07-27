@@ -265,8 +265,7 @@ func Test_getProdConfig(t *testing.T) {
 			name: "プロダクション環境の設定取得",
 			want: config.Config{
 				ServerURL: config.ServerURL{
-					DRFServer:    prodDRFServerURL,
-					GolangServer: prodGolangServerURL,
+					DRFServer: prodDRFServerURL,
 				},
 			},
 		},
@@ -290,8 +289,7 @@ func Test_getLocalConfig(t *testing.T) {
 			name: "ローカル環境の設定取得",
 			want: config.Config{
 				ServerURL: config.ServerURL{
-					DRFServer:    localDRFServerURL,
-					GolangServer: localGolangServerURL,
+					DRFServer: localDRFServerURL,
 				},
 			},
 		},
