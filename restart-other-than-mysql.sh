@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo "DRFサービスのビルドをしています..."
-
 docker-compose -f production.yml build --no-cache drf
 
 echo "fast-apiサービスのビルドをしています..."
@@ -20,7 +19,6 @@ docker-compose -f production.yml stop drf
 docker-compose -f production.yml up -d drf
 echo "DRFサービスの再起動が完了しました。"
 
-
 echo "fast-apiサービスを再起動しています..."
 docker-compose -f production.yml stop fast-api
 docker-compose -f production.yml up -d fast-api
@@ -37,8 +35,3 @@ docker-compose -f production.yml up -d ticker-batch
 echo "バッチサービスの再起動が完了しました。"
 
 echo "すべてのサービスの再起動が完了しました。"
-
-
-
-
-
