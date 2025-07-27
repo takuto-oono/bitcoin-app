@@ -6,7 +6,6 @@
 
 #### mysql
 
-
 起動コマンド
 ```brew services start mysql```
 
@@ -53,7 +52,6 @@ mysqlへの接続
 
 prodのtickersテーブルの情報を開発環境にコピーする (結構時間がかかる)
 ```cd ~/bitcoin-app/golang && go run cmd/import_tickers/main.go```
-
 
 ### prod環境
 
