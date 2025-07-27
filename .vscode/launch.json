@@ -30,6 +30,26 @@
       "env": {},
       "args": [],
       "showLog": true
+    },
+    {
+      "name": "DRF Server",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/drf/manage.py",
+      "args": ["runserver"],
+      "cwd": "${workspaceFolder}/python/drf",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Fast API Server",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/fast_api/main.py",
+      "args": [],
+      "cwd": "${workspaceFolder}/python/fast_api",
+      "console": "integratedTerminal",
+      "justMyCode": true
     }
   ]
 }
