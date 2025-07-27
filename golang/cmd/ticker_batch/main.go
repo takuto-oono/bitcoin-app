@@ -37,11 +37,13 @@ func main() {
 		log.Println("Shutting down gracefully...")
 	}()
 
-	runTickerBatch(ctx, golangServer, drf)
+	interval := time.Duration(cfg.TickerBatch.BatchIntervalSec) * time.Second
+
+	runTickerBatch(ctx, golangServer, drf, interval)
 }
 
-func runTickerBatch(ctx context.Context, golangServer api.IGolangServerAPI, drf api.IDRFAPI) {
-	ticker := time.NewTicker(TickerInterval)
+func runTickerBatch(ctx context.Context, golangServer api.IGolangServerAPI, drf api.IDRFAPI, interval time.Duration) {
+	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 
 	for {

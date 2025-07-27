@@ -1,3 +1,6 @@
 [serverURL]
 golangServer="http://golang-server:8080"
 drfServer="http://drf:8000"
+
+[tickerBatch]
+batchIntervalSec=1
