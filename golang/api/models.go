@@ -17,16 +17,6 @@ const (
 	ProductCodeFXBTCJPY = "FX_BTC_JPY"
 
 	GetExecutionsDefaultCount = "100"
-
-	ChildOrderTypeLimit  = "LIMIT"
-	ChildOrderTypeMarket = "MARKET"
-
-	SideBuy  = "BUY"
-	SideSell = "SELL"
-
-	TimeInForceGTC = "GTC"
-	TimeInForceIOC = "IOC"
-	TimeInForceFOK = "FOK"
 )
 
 type TickerFromBitFlyer struct {
@@ -47,6 +37,7 @@ type TickerFromBitFlyer struct {
 	VolumeByProduct float64 `json:"volume_by_product"`
 }
 
+// TODO https://github.com/takuto-oono/bitcoin-app/issues/46
 type ProductCode string
 
 func NewProductCode(productCode string) (ProductCode, error) {
@@ -133,3 +124,16 @@ func ConvertTickerFromGolang(golangTicker TickerFromGolangServer) PostTickerDRFR
 	return PostTickerDRFRequest(golangTicker)
 }
 
+type SendChildOrderRequest struct {
+	ProductCode    ProductCode `json:"product_code"`
+	ChildOrderType string      `json:"child_order_type"`
+	Side           string      `json:"side"`
+	Price          float64     `json:"price"`
+	Size           float64     `json:"size"`
+	MinuteToExpire int         `json:"minute_to_expire"`
+	TimeInForce    string      `json:"time_in_force"`
+}
+
+type SendChildOrderResponse struct {
+	ChildOrderAcceptanceID string `json:"child_order_acceptance_id"`
+}

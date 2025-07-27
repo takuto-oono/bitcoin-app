@@ -20,6 +20,10 @@ func (b BitFlyerURL) GetTicker(productCode ProductCode) (string, error) {
 	return createUrl(string(b), "v1/getticker", qVal)
 }
 
+func (b BitFlyerURL) SendChildOrder() (string, error) {
+	return createUrl(string(b), "v1/me/sendchildorder", nil)
+}
+
 func (g GolangServerURL) GetTicker(productCode ProductCode) (string, error) {
 	qVal := url.Values{}
 	if productCode != "" {

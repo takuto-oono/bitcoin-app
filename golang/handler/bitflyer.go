@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 
 	"bitcoin-app-golang/config"
@@ -9,6 +12,8 @@ import (
 
 type IBitFlyerHandler interface {
 	GetTickerFromBitFlyer(ctx *gin.Context)
+	BuyOrder(ctx *gin.Context)
+	SellOrder(ctx *gin.Context)
 }
 
 type BitFlyerHandler struct {
@@ -32,8 +37,43 @@ func (h *BitFlyerHandler) GetTickerFromBitFlyer(ctx *gin.Context) {
 	ticker, statusCode, err := h.UseCase.GetTicker(productCode)
 	if err != nil {
 		ctx.JSON(statusCode, gin.H{"error": err.Error()})
+		log.Printf("Error getting ticker: %v", err)
 		return
 	}
 
 	ctx.JSON(statusCode, ticker)
+}
+
+func (h *BitFlyerHandler) BuyOrder(ctx *gin.Context) {
+	var dto usecase.BuyOrderDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	res, statusCode, err := h.UseCase.BuyOrder(dto)
+	if err != nil {
+		ctx.JSON(statusCode, gin.H{"error": err.Error()})
+		log.Printf("Error processing buy order: %v", err)
+		return
+	}
+
+	ctx.JSON(statusCode, res)
+}
+
+func (h *BitFlyerHandler) SellOrder(ctx *gin.Context) {
+	var dto usecase.SellOrderDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	res, statusCode, err := h.UseCase.SellOrder(dto)
+	if err != nil {
+		ctx.JSON(statusCode, gin.H{"error": err.Error()})
+		log.Printf("Error processing sell order: %v", err)
+		return
+	}
+
+	ctx.JSON(statusCode, res)
 }

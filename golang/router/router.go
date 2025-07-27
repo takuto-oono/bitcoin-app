@@ -22,7 +22,10 @@ func setRoutes(r *gin.Engine, cfg config.Config) *gin.Engine {
 		c.String(http.StatusOK, "hello golang server")
 	})
 
-	r.GET("/bitflyer/ticker", bitFlyerHandler.GetTickerFromBitFlyer)
+	bitflyer := r.Group("/bitflyer")
+	bitflyer.GET("/ticker", bitFlyerHandler.GetTickerFromBitFlyer)
+	bitflyer.POST("/order/buy", bitFlyerHandler.BuyOrder)
+	bitflyer.POST("/order/sell", bitFlyerHandler.SellOrder)
 
 	return r
 }
