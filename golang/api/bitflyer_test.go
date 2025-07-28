@@ -2,6 +2,7 @@ package api
 
 import (
 	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 	"reflect"
 	"testing"
 )
@@ -57,10 +58,10 @@ func TestBitFlyerAPI_GetTicker(t *testing.T) {
 				API:    NewAPI(),
 			},
 			args: args{
-				productCode: "BTC_JPY",
+				productCode: consts.ProductCodeBTCJPY,
 			},
 			wantCheckFunc: func(want TickerFromBitFlyer) bool {
-				return want.TickID > 0 && want.ProductCode == "BTC_JPY"
+				return want.TickID > 0 && want.ProductCode == consts.ProductCodeBTCJPY
 			},
 			wantErr: false,
 		},
@@ -74,7 +75,7 @@ func TestBitFlyerAPI_GetTicker(t *testing.T) {
 				productCode: "",
 			},
 			wantCheckFunc: func(want TickerFromBitFlyer) bool {
-				return want.TickID > 0 && want.ProductCode == "BTC_JPY"
+				return want.TickID > 0 && want.ProductCode == consts.ProductCodeBTCJPY
 			},
 			wantErr: false,
 		},
@@ -120,13 +121,13 @@ func TestBitFlyerAPI_SendChildOrder(t *testing.T) {
 			},
 			args: args{
 				args: SendChildOrderRequest{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: "LIMIT",
-					Side:           "BUY",
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
+					Side:           consts.SideBuy,
 					Price:          1000000,
 					Size:           0.01,
 					MinuteToExpire: 43200,
-					TimeInForce:    "GTC",
+					TimeInForce:    consts.TimeInForceGTC,
 				},
 			},
 			want:    SendChildOrderResponse{},
@@ -140,12 +141,12 @@ func TestBitFlyerAPI_SendChildOrder(t *testing.T) {
 			},
 			args: args{
 				args: SendChildOrderRequest{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: "MARKET",
-					Side:           "SELL",
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeMarket,
+					Side:           consts.SideSell,
 					Size:           0.01,
 					MinuteToExpire: 43200,
-					TimeInForce:    "IOC",
+					TimeInForce:    consts.TimeInForceIOC,
 				},
 			},
 			want:    SendChildOrderResponse{},
@@ -159,13 +160,13 @@ func TestBitFlyerAPI_SendChildOrder(t *testing.T) {
 			},
 			args: args{
 				args: SendChildOrderRequest{
-					ProductCode:    "ETH_JPY",
-					ChildOrderType: "LIMIT",
-					Side:           "BUY",
+					ProductCode:    consts.ProductCodeETHJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
+					Side:           consts.SideBuy,
 					Price:          500000,
 					Size:           0.1,
 					MinuteToExpire: 43200,
-					TimeInForce:    "FOK",
+					TimeInForce:    consts.TimeInForceFOK,
 				},
 			},
 			want:    SendChildOrderResponse{},

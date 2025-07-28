@@ -6,6 +6,7 @@ import (
 
 	"bitcoin-app-golang/api"
 	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 )
 
 func Test_getDRFFromPostDRF(t *testing.T) {
@@ -23,7 +24,7 @@ func Test_getDRFFromPostDRF(t *testing.T) {
 				ticker: api.GetTickerFromDRFResponse{
 					ID:              1,
 					TickID:          12345,
-					ProductCode:     "BTC_JPY",
+					ProductCode:     consts.ProductCodeBTCJPY,
 					State:           "RUNNING",
 					Timestamp:       "2023-01-01T00:00:00.000Z",
 					BestBid:         4500000.0,
@@ -41,7 +42,7 @@ func Test_getDRFFromPostDRF(t *testing.T) {
 			},
 			want: api.PostTickerDRFRequest{
 				TickID:          12345,
-				ProductCode:     "BTC_JPY",
+				ProductCode:     consts.ProductCodeBTCJPY,
 				State:           "RUNNING",
 				Timestamp:       "2023-01-01T00:00:00.000Z",
 				BestBid:         4500000.0,
@@ -63,7 +64,7 @@ func Test_getDRFFromPostDRF(t *testing.T) {
 				ticker: api.GetTickerFromDRFResponse{
 					ID:              2,
 					TickID:          0,
-					ProductCode:     "ETH_JPY",
+					ProductCode:     consts.ProductCodeETHJPY,
 					State:           "STOP",
 					Timestamp:       "",
 					BestBid:         0.0,
@@ -81,7 +82,7 @@ func Test_getDRFFromPostDRF(t *testing.T) {
 			},
 			want: api.PostTickerDRFRequest{
 				TickID:          0,
-				ProductCode:     "ETH_JPY",
+				ProductCode:     consts.ProductCodeETHJPY,
 				State:           "STOP",
 				Timestamp:       "",
 				BestBid:         0.0,
@@ -130,7 +131,7 @@ func Test_convertTickers(t *testing.T) {
 					{
 						ID:              1,
 						TickID:          12345,
-						ProductCode:     "BTC_JPY",
+						ProductCode:     consts.ProductCodeBTCJPY,
 						State:           "RUNNING",
 						Timestamp:       "2023-01-01T00:00:00.000Z",
 						BestBid:         4500000.0,
@@ -150,7 +151,7 @@ func Test_convertTickers(t *testing.T) {
 			want: []api.PostTickerDRFRequest{
 				{
 					TickID:          12345,
-					ProductCode:     "BTC_JPY",
+					ProductCode:     consts.ProductCodeBTCJPY,
 					State:           "RUNNING",
 					Timestamp:       "2023-01-01T00:00:00.000Z",
 					BestBid:         4500000.0,
@@ -174,7 +175,7 @@ func Test_convertTickers(t *testing.T) {
 					{
 						ID:              1,
 						TickID:          12345,
-						ProductCode:     "BTC_JPY",
+						ProductCode:     consts.ProductCodeBTCJPY,
 						State:           "RUNNING",
 						Timestamp:       "2023-01-01T00:00:00.000Z",
 						BestBid:         4500000.0,
@@ -192,7 +193,7 @@ func Test_convertTickers(t *testing.T) {
 					{
 						ID:              2,
 						TickID:          67890,
-						ProductCode:     "ETH_JPY",
+						ProductCode:     consts.ProductCodeETHJPY,
 						State:           "RUNNING",
 						Timestamp:       "2023-01-01T01:00:00.000Z",
 						BestBid:         300000.0,
@@ -212,7 +213,7 @@ func Test_convertTickers(t *testing.T) {
 			want: []api.PostTickerDRFRequest{
 				{
 					TickID:          12345,
-					ProductCode:     "BTC_JPY",
+					ProductCode:     consts.ProductCodeBTCJPY,
 					State:           "RUNNING",
 					Timestamp:       "2023-01-01T00:00:00.000Z",
 					BestBid:         4500000.0,
@@ -229,7 +230,7 @@ func Test_convertTickers(t *testing.T) {
 				},
 				{
 					TickID:          67890,
-					ProductCode:     "ETH_JPY",
+					ProductCode:     consts.ProductCodeETHJPY,
 					State:           "RUNNING",
 					Timestamp:       "2023-01-01T01:00:00.000Z",
 					BestBid:         300000.0,

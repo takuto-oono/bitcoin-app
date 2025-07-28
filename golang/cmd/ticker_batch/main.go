@@ -11,12 +11,12 @@ import (
 
 	"bitcoin-app-golang/api"
 	"bitcoin-app-golang/config"
-	"bitcoin-app-golang/usecase"
+	"bitcoin-app-golang/consts"
 )
 
 const (
 	TickerInterval     = 1 * time.Second
-	DefaultProductCode = usecase.ProductCodeBTCJPY
+	DefaultProductCode = consts.ProductCodeBTCJPY
 )
 
 func main() {

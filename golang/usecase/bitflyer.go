@@ -7,31 +7,7 @@ import (
 
 	"bitcoin-app-golang/api"
 	"bitcoin-app-golang/config"
-)
-
-const (
-	ProductCodeBTCJPY  = "BTC_JPY"
-	ProductCodeXRPJPY  = "XRP_JPY"
-	ProductCodeETHJPY  = "ETH_JPY"
-	ProductCodeXLMJPY  = "XLM_JPY"
-	ProductCodeMONAJPY = "MONA_JPY"
-
-	ProductCodeETHBTC   = "ETH_BTC"
-	ProductCodeBCHBTC   = "BCH_BTC"
-	ProductCodeFXBTCJPY = "FX_BTC_JPY"
-
-	ChildOrderTypeLimit  ChildOrderType = "LIMIT"
-	ChildOrderTypeMarket ChildOrderType = "MARKET"
-
-	SideBuy  = "BUY"
-	SideSell = "SELL"
-
-	TimeInForceGTC TimeInForce = "GTC"
-	TimeInForceIOC TimeInForce = "IOC"
-	TimeInForceFOK TimeInForce = "FOK"
-
-	MinMinuteToExpire = 1
-	MaxMinuteToExpire = 43200 // 30 days in minutes
+	"bitcoin-app-golang/consts"
 )
 
 type IBitFlyerUsecase interface {
@@ -94,7 +70,7 @@ func (b *BitFlyerUsecase) BuyOrder(dto BuyOrderDTO) (api.SendChildOrderResponse,
 	args := api.SendChildOrderRequest{
 		ProductCode:    string(dto.ProductCode),
 		ChildOrderType: string(dto.ChildOrderType),
-		Side:           SideBuy,
+		Side:           consts.SideBuy,
 		Price:          dto.Price,
 		Size:           dto.Size,
 		MinuteToExpire: int(dto.MinuteToExpire),
@@ -117,7 +93,7 @@ func (b *BitFlyerUsecase) SellOrder(dto SellOrderDTO) (api.SendChildOrderRespons
 	args := api.SendChildOrderRequest{
 		ProductCode:    string(dto.ProductCode),
 		ChildOrderType: string(dto.ChildOrderType),
-		Side:           SideSell,
+		Side:           consts.SideSell,
 		Price:          dto.Price,
 		Size:           dto.Size,
 		MinuteToExpire: int(dto.MinuteToExpire),
@@ -147,7 +123,7 @@ func validateBuyOrSellOrder(dto any) error {
 		if err := v.MinuteToExpire.validate(); err != nil {
 			return err
 		}
-		if v.ChildOrderType == ChildOrderTypeLimit && v.Price <= 0 {
+		if v.ChildOrderType == consts.ChildOrderTypeLimit && v.Price <= 0 {
 			return errors.New("price must be greater than 0 for LIMIT orders")
 		}
 	case SellOrderDTO:
@@ -163,7 +139,7 @@ func validateBuyOrSellOrder(dto any) error {
 		if err := v.MinuteToExpire.validate(); err != nil {
 			return err
 		}
-		if v.ChildOrderType == ChildOrderTypeLimit && v.Price <= 0 {
+		if v.ChildOrderType == consts.ChildOrderTypeLimit && v.Price <= 0 {
 			return errors.New("price must be greater than 0 for LIMIT orders")
 		}
 	default:
@@ -176,8 +152,8 @@ type ProductCode string
 
 func (p ProductCode) validate() error {
 	switch p {
-	case ProductCodeBTCJPY, ProductCodeXRPJPY, ProductCodeETHJPY, ProductCodeXLMJPY, ProductCodeMONAJPY,
-		ProductCodeETHBTC, ProductCodeBCHBTC, ProductCodeFXBTCJPY:
+	case consts.ProductCodeBTCJPY, consts.ProductCodeXRPJPY, consts.ProductCodeETHJPY, consts.ProductCodeXLMJPY, consts.ProductCodeMONAJPY,
+		consts.ProductCodeETHBTC, consts.ProductCodeBCHBTC, consts.ProductCodeFXBTCJPY:
 		return nil
 	default:
 		return fmt.Errorf("invalid product code: %s", p)
@@ -196,7 +172,7 @@ type ChildOrderType string
 
 func (c ChildOrderType) validate() error {
 	switch c {
-	case ChildOrderTypeLimit, ChildOrderTypeMarket:
+	case consts.ChildOrderTypeLimit, consts.ChildOrderTypeMarket:
 		return nil
 	default:
 		return errors.New("invalid child order type")
@@ -207,7 +183,7 @@ type TimeInForce string
 
 func (t TimeInForce) validate() error {
 	switch t {
-	case TimeInForceGTC, TimeInForceIOC, TimeInForceFOK:
+	case consts.TimeInForceGTC, consts.TimeInForceIOC, consts.TimeInForceFOK:
 		return nil
 	default:
 		return errors.New("invalid time in force")
@@ -217,8 +193,8 @@ func (t TimeInForce) validate() error {
 type MinuteToExpire int
 
 func (m MinuteToExpire) validate() error {
-	if m < MinMinuteToExpire || m > MaxMinuteToExpire {
-		return fmt.Errorf("minute to expire must be between %d and %d", MinMinuteToExpire, MaxMinuteToExpire)
+	if m < consts.MinMinuteToExpire || m > consts.MaxMinuteToExpire {
+		return fmt.Errorf("minute to expire must be between %d and %d", consts.MinMinuteToExpire, consts.MaxMinuteToExpire)
 	}
 	return nil
 }
