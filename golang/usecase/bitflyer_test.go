@@ -1,11 +1,13 @@
 package usecase
 
 import (
-	"bitcoin-app-golang/api"
-	"bitcoin-app-golang/config"
 	"net/http"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/api"
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 )
 
 func TestNewBitFlyerUsecase(t *testing.T) {
@@ -60,10 +62,10 @@ func TestBitFlyerUsecase_GetTicker(t *testing.T) {
 				BitFlyerAPI: api.NewBitFlyerAPI(TestConfig),
 			},
 			args: args{
-				productCode: "BTC_JPY",
+				productCode: consts.ProductCodeBTCJPY,
 			},
 			wantCheckFunc: func(want api.TickerFromBitFlyer) bool {
-				return want.TickID > 0 && want.ProductCode == "BTC_JPY"
+				return want.TickID > 0 && want.ProductCode == consts.ProductCodeBTCJPY
 			},
 			want1:   http.StatusOK,
 			wantErr: false,
@@ -145,12 +147,12 @@ func TestBitFlyerUsecase_BuyOrder(t *testing.T) {
 			},
 			args: args{
 				dto: BuyOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 43200,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の購入APIが実行されます
 				},
 			},
@@ -166,12 +168,12 @@ func TestBitFlyerUsecase_BuyOrder(t *testing.T) {
 			},
 			args: args{
 				dto: BuyOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeMarket,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeMarket,
 					Price:          0,
 					Size:           0.001,
 					MinuteToExpire: 1,
-					TimeInForce:    TimeInForceIOC,
+					TimeInForce:    consts.TimeInForceIOC,
 					IsDry:          true, // 注意: falseにすると実際の購入APIが実行されます
 				},
 			},
@@ -187,12 +189,12 @@ func TestBitFlyerUsecase_BuyOrder(t *testing.T) {
 			},
 			args: args{
 				dto: BuyOrderDTO{
-					ProductCode:    "BTC_JPY",
+					ProductCode:    consts.ProductCodeBTCJPY,
 					ChildOrderType: "INVALID",
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 43200,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の購入APIが実行されます
 				},
 			},
@@ -208,8 +210,8 @@ func TestBitFlyerUsecase_BuyOrder(t *testing.T) {
 			},
 			args: args{
 				dto: BuyOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 43200,
@@ -229,12 +231,12 @@ func TestBitFlyerUsecase_BuyOrder(t *testing.T) {
 			},
 			args: args{
 				dto: BuyOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 0,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の購入APIが実行されます
 				},
 			},
@@ -250,12 +252,12 @@ func TestBitFlyerUsecase_BuyOrder(t *testing.T) {
 			},
 			args: args{
 				dto: BuyOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 50000,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の購入APIが実行されます
 				},
 			},
@@ -271,12 +273,12 @@ func TestBitFlyerUsecase_BuyOrder(t *testing.T) {
 			},
 			args: args{
 				dto: BuyOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          0,
 					Size:           0.001,
 					MinuteToExpire: 43200,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の購入APIが実行されます
 				},
 			},
@@ -331,12 +333,12 @@ func TestBitFlyerUsecase_SellOrder(t *testing.T) {
 			},
 			args: args{
 				dto: SellOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 43200,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の売却APIが実行されます
 				},
 			},
@@ -352,12 +354,12 @@ func TestBitFlyerUsecase_SellOrder(t *testing.T) {
 			},
 			args: args{
 				dto: SellOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeMarket,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeMarket,
 					Price:          0,
 					Size:           0.001,
 					MinuteToExpire: 1,
-					TimeInForce:    TimeInForceIOC,
+					TimeInForce:    consts.TimeInForceIOC,
 					IsDry:          true, // 注意: falseにすると実際の売却APIが実行されます
 				},
 			},
@@ -373,12 +375,12 @@ func TestBitFlyerUsecase_SellOrder(t *testing.T) {
 			},
 			args: args{
 				dto: SellOrderDTO{
-					ProductCode:    "BTC_JPY",
+					ProductCode:    consts.ProductCodeBTCJPY,
 					ChildOrderType: "INVALID",
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 43200,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の売却APIが実行されます
 				},
 			},
@@ -394,8 +396,8 @@ func TestBitFlyerUsecase_SellOrder(t *testing.T) {
 			},
 			args: args{
 				dto: SellOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          1000000,
 					Size:           0.001,
 					MinuteToExpire: 43200,
@@ -415,12 +417,12 @@ func TestBitFlyerUsecase_SellOrder(t *testing.T) {
 			},
 			args: args{
 				dto: SellOrderDTO{
-					ProductCode:    "BTC_JPY",
-					ChildOrderType: ChildOrderTypeLimit,
+					ProductCode:    consts.ProductCodeBTCJPY,
+					ChildOrderType: consts.ChildOrderTypeLimit,
 					Price:          0,
 					Size:           0.001,
 					MinuteToExpire: 43200,
-					TimeInForce:    TimeInForceGTC,
+					TimeInForce:    consts.TimeInForceGTC,
 					IsDry:          true, // 注意: falseにすると実際の売却APIが実行されます
 				},
 			},
@@ -458,12 +460,12 @@ func TestChildOrderType_validate(t *testing.T) {
 	}{
 		{
 			name:    "valid LIMIT order type",
-			c:       ChildOrderTypeLimit,
+			c:       consts.ChildOrderTypeLimit,
 			wantErr: false,
 		},
 		{
 			name:    "valid MARKET order type",
-			c:       ChildOrderTypeMarket,
+			c:       consts.ChildOrderTypeMarket,
 			wantErr: false,
 		},
 		{
@@ -494,17 +496,17 @@ func TestTimeInForce_validate(t *testing.T) {
 	}{
 		{
 			name:    "valid GTC time in force",
-			tr:      TimeInForceGTC,
+			tr:      consts.TimeInForceGTC,
 			wantErr: false,
 		},
 		{
 			name:    "valid IOC time in force",
-			tr:      TimeInForceIOC,
+			tr:      consts.TimeInForceIOC,
 			wantErr: false,
 		},
 		{
 			name:    "valid FOK time in force",
-			tr:      TimeInForceFOK,
+			tr:      consts.TimeInForceFOK,
 			wantErr: false,
 		},
 		{
@@ -535,12 +537,12 @@ func TestMinuteToExpire_validate(t *testing.T) {
 	}{
 		{
 			name:    "valid minimum minute to expire",
-			m:       MinuteToExpire(MinMinuteToExpire),
+			m:       MinuteToExpire(consts.MinMinuteToExpire),
 			wantErr: false,
 		},
 		{
 			name:    "valid maximum minute to expire",
-			m:       MinuteToExpire(MaxMinuteToExpire),
+			m:       MinuteToExpire(consts.MaxMinuteToExpire),
 			wantErr: false,
 		},
 		{
@@ -560,7 +562,7 @@ func TestMinuteToExpire_validate(t *testing.T) {
 		},
 		{
 			name:    "invalid minute to expire - too large",
-			m:       MinuteToExpire(MaxMinuteToExpire + 1),
+			m:       MinuteToExpire(consts.MaxMinuteToExpire + 1),
 			wantErr: true,
 		},
 	}
@@ -581,42 +583,42 @@ func TestProductCode_validate(t *testing.T) {
 	}{
 		{
 			name:    "valid BTC_JPY",
-			p:       ProductCodeBTCJPY,
+			p:       consts.ProductCodeBTCJPY,
 			wantErr: false,
 		},
 		{
 			name:    "valid XRP_JPY",
-			p:       ProductCodeXRPJPY,
+			p:       consts.ProductCodeXRPJPY,
 			wantErr: false,
 		},
 		{
 			name:    "valid ETH_JPY",
-			p:       ProductCodeETHJPY,
+			p:       consts.ProductCodeETHJPY,
 			wantErr: false,
 		},
 		{
 			name:    "valid XLM_JPY",
-			p:       ProductCodeXLMJPY,
+			p:       consts.ProductCodeXLMJPY,
 			wantErr: false,
 		},
 		{
 			name:    "valid MONA_JPY",
-			p:       ProductCodeMONAJPY,
+			p:       consts.ProductCodeMONAJPY,
 			wantErr: false,
 		},
 		{
 			name:    "valid ETH_BTC",
-			p:       ProductCodeETHBTC,
+			p:       consts.ProductCodeETHBTC,
 			wantErr: false,
 		},
 		{
 			name:    "valid BCH_BTC",
-			p:       ProductCodeBCHBTC,
+			p:       consts.ProductCodeBCHBTC,
 			wantErr: false,
 		},
 		{
 			name:    "valid FX_BTC_JPY",
-			p:       ProductCodeFXBTCJPY,
+			p:       consts.ProductCodeFXBTCJPY,
 			wantErr: false,
 		},
 		{
@@ -662,65 +664,65 @@ func TestNewProductCode(t *testing.T) {
 		{
 			name: "valid BTC_JPY",
 			args: args{
-				code: "BTC_JPY",
+				code: consts.ProductCodeBTCJPY,
 			},
-			want:    ProductCodeBTCJPY,
+			want:    consts.ProductCodeBTCJPY,
 			wantErr: false,
 		},
 		{
 			name: "valid XRP_JPY",
 			args: args{
-				code: "XRP_JPY",
+				code: consts.ProductCodeXRPJPY,
 			},
-			want:    ProductCodeXRPJPY,
+			want:    consts.ProductCodeXRPJPY,
 			wantErr: false,
 		},
 		{
 			name: "valid ETH_JPY",
 			args: args{
-				code: "ETH_JPY",
+				code: consts.ProductCodeETHJPY,
 			},
-			want:    ProductCodeETHJPY,
+			want:    consts.ProductCodeETHJPY,
 			wantErr: false,
 		},
 		{
 			name: "valid XLM_JPY",
 			args: args{
-				code: "XLM_JPY",
+				code: consts.ProductCodeXLMJPY,
 			},
-			want:    ProductCodeXLMJPY,
+			want:    consts.ProductCodeXLMJPY,
 			wantErr: false,
 		},
 		{
 			name: "valid MONA_JPY",
 			args: args{
-				code: "MONA_JPY",
+				code: consts.ProductCodeMONAJPY,
 			},
-			want:    ProductCodeMONAJPY,
+			want:    consts.ProductCodeMONAJPY,
 			wantErr: false,
 		},
 		{
 			name: "valid ETH_BTC",
 			args: args{
-				code: "ETH_BTC",
+				code: consts.ProductCodeETHBTC,
 			},
-			want:    ProductCodeETHBTC,
+			want:    consts.ProductCodeETHBTC,
 			wantErr: false,
 		},
 		{
 			name: "valid BCH_BTC",
 			args: args{
-				code: "BCH_BTC",
+				code: consts.ProductCodeBCHBTC,
 			},
-			want:    ProductCodeBCHBTC,
+			want:    consts.ProductCodeBCHBTC,
 			wantErr: false,
 		},
 		{
 			name: "valid FX_BTC_JPY",
 			args: args{
-				code: "FX_BTC_JPY",
+				code: consts.ProductCodeFXBTCJPY,
 			},
-			want:    ProductCodeFXBTCJPY,
+			want:    consts.ProductCodeFXBTCJPY,
 			wantErr: false,
 		},
 		{

@@ -3,6 +3,8 @@ package api
 import (
 	"net/url"
 	"testing"
+
+	"bitcoin-app-golang/consts"
 )
 
 func TestBitFlyerURL_GetTicker(t *testing.T) {
@@ -17,7 +19,7 @@ func TestBitFlyerURL_GetTicker(t *testing.T) {
 	}{
 		{
 			name:    "success",
-			args:    args{productCode: "BTC_JPY"},
+			args:    args{productCode: consts.ProductCodeBTCJPY},
 			want:    "https://api.bitflyer.com/v1/getticker/?product_code=BTC_JPY",
 			wantErr: false,
 		},
@@ -85,7 +87,7 @@ func TestGolangServerURL_GetTicker(t *testing.T) {
 			name: "success",
 			g:    GolangServerURL("https://localhost:8080"),
 			args: args{
-				productCode: "BTC_JPY",
+				productCode: consts.ProductCodeBTCJPY,
 			},
 			want:    "https://localhost:8080/bitflyer/ticker/?product_code=BTC_JPY",
 			wantErr: false,

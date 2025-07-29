@@ -1,20 +1,22 @@
 package api
 
 import (
-	"bitcoin-app-golang/config"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 )
 
 func TestDRFAPI_PostBitFlyerTicker(t *testing.T) {
 	// モックティッカーデータ
 	mockTicker := PostTickerDRFRequest{
 		TickID:          12345,
-		ProductCode:     "BTC_JPY",
+		ProductCode:     consts.ProductCodeBTCJPY,
 		State:           "RUNNING",
 		Timestamp:       "2025-05-18T17:00:00",
 		BestBid:         5000000.0,
@@ -70,7 +72,7 @@ func TestDRFAPI_PostBitFlyerTicker(t *testing.T) {
 						t.Errorf("Failed to unmarshal request body: %v", err)
 					}
 
-					if receivedTicker.ProductCode != "BTC_JPY" {
+					if receivedTicker.ProductCode != consts.ProductCodeBTCJPY {
 						t.Errorf("Expected product_code 'BTC_JPY', got %s", receivedTicker.ProductCode)
 					}
 
@@ -114,7 +116,7 @@ func TestDRFAPI_PostBitFlyerTicker(t *testing.T) {
 						t.Errorf("Failed to unmarshal request body: %v", err)
 					}
 
-					if receivedTicker.ProductCode != "ETH_JPY" {
+					if receivedTicker.ProductCode != consts.ProductCodeETHJPY {
 						t.Errorf("Expected product_code 'ETH_JPY', got %s", receivedTicker.ProductCode)
 					}
 
@@ -130,7 +132,7 @@ func TestDRFAPI_PostBitFlyerTicker(t *testing.T) {
 			args: args{
 				ticker: PostTickerDRFRequest{
 					TickID:          12345,
-					ProductCode:     "ETH_JPY",
+					ProductCode:     consts.ProductCodeETHJPY,
 					State:           "RUNNING",
 					Timestamp:       "2025-05-18T17:00:00",
 					BestBid:         300000.0,
@@ -212,7 +214,7 @@ func TestDRFAPI_GetBitFlyerTickers(t *testing.T) {
 		{
 			ID:              1,
 			TickID:          12345,
-			ProductCode:     "BTC_JPY",
+			ProductCode:     consts.ProductCodeBTCJPY,
 			State:           "RUNNING",
 			Timestamp:       "2025-05-18T17:00:00",
 			BestBid:         5000000.0,
@@ -230,7 +232,7 @@ func TestDRFAPI_GetBitFlyerTickers(t *testing.T) {
 		{
 			ID:              2,
 			TickID:          12346,
-			ProductCode:     "ETH_JPY",
+			ProductCode:     consts.ProductCodeETHJPY,
 			State:           "RUNNING",
 			Timestamp:       "2025-05-18T17:01:00",
 			BestBid:         300000.0,

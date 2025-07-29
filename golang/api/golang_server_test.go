@@ -8,13 +8,14 @@ import (
 	"testing"
 
 	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 )
 
 func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 	// モックティッカーデータ
 	mockTicker := TickerFromGolangServer{
 		TickID:          12345,
-		ProductCode:     "BTC_JPY",
+		ProductCode:     consts.ProductCodeBTCJPY,
 		State:           "RUNNING",
 		Timestamp:       "2025-05-18T17:00:00",
 		BestBid:         5000000.0,
@@ -56,7 +57,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 					}
 
 					productCode := r.URL.Query().Get("product_code")
-					if productCode != "BTC_JPY" {
+					if productCode != consts.ProductCodeBTCJPY {
 						t.Errorf("Expected product_code 'BTC_JPY', got %s", productCode)
 					}
 
@@ -70,7 +71,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 				API: NewAPI(),
 			},
 			args: args{
-				productCode: "BTC_JPY",
+				productCode: consts.ProductCodeBTCJPY,
 			},
 			want:    mockTicker,
 			wantErr: false,
@@ -85,7 +86,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 					}
 
 					productCode := r.URL.Query().Get("product_code")
-					if productCode != "ETH_JPY" {
+					if productCode != consts.ProductCodeETHJPY {
 						t.Errorf("Expected product_code 'ETH_JPY', got %s", productCode)
 					}
 
@@ -99,7 +100,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 				API: NewAPI(),
 			},
 			args: args{
-				productCode: "ETH_JPY",
+				productCode: consts.ProductCodeETHJPY,
 			},
 			want:    mockTicker,
 			wantErr: false,
@@ -116,7 +117,7 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 				API: NewAPI(),
 			},
 			args: args{
-				productCode: "BTC_JPY",
+				productCode: consts.ProductCodeBTCJPY,
 			},
 			want:    TickerFromGolangServer{},
 			wantErr: true,

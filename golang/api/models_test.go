@@ -3,6 +3,8 @@ package api
 import (
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/consts"
 )
 
 func TestConvertTicker(t *testing.T) {
@@ -19,7 +21,7 @@ func TestConvertTicker(t *testing.T) {
 			args: args{
 				golangTicker: TickerFromGolangServer{
 					TickID:          1,
-					ProductCode:     "BTC_JPY",
+					ProductCode:     consts.ProductCodeBTCJPY,
 					State:           "RUNNING",
 					Timestamp:       "2023-10-01T00:00:00Z",
 					BestBid:         5000000,
@@ -37,7 +39,7 @@ func TestConvertTicker(t *testing.T) {
 			},
 			want: PostTickerDRFRequest{
 				TickID:          1,
-				ProductCode:     "BTC_JPY",
+				ProductCode:     consts.ProductCodeBTCJPY,
 				State:           "RUNNING",
 				Timestamp:       "2023-10-01T00:00:00Z",
 				BestBid:         5000000,

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"bitcoin-app-golang/config"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -9,6 +8,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"bitcoin-app-golang/config"
 )
 
 type API struct{}
