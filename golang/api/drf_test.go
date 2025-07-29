@@ -1,14 +1,15 @@
 package api
 
 import (
-	"bitcoin-app-golang/config"
-	"bitcoin-app-golang/consts"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 )
 
 func TestDRFAPI_PostBitFlyerTicker(t *testing.T) {

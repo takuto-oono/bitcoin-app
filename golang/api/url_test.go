@@ -1,9 +1,10 @@
 package api
 
 import (
-	"bitcoin-app-golang/consts"
 	"net/url"
 	"testing"
+
+	"bitcoin-app-golang/consts"
 )
 
 func TestBitFlyerURL_GetTicker(t *testing.T) {

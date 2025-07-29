@@ -1,10 +1,11 @@
 package api
 
 import (
-	"bitcoin-app-golang/config"
-	"bitcoin-app-golang/consts"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 )
 
 func TestNewBitFlyerAPI(t *testing.T) {

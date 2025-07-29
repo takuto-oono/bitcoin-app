@@ -1,9 +1,10 @@
 package api
 
 import (
-	"bitcoin-app-golang/consts"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/consts"
 )
 
 func TestConvertTicker(t *testing.T) {
