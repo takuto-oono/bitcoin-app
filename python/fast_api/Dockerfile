@@ -1,4 +1,4 @@
-FROM python:3.13.5-alpine3.21
+FROM python:3.13.5-alpine3.22
 
 # 環境変数を設定
 ENV PYTHONDONTWRITEBYTECODE=1
