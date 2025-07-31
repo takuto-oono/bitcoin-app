@@ -167,3 +167,77 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ],
 }
+
+# ログディレクトリの作成
+LOG_DIR = '/app/logs' if DJANGO_ENV == 'production' else BASE_DIR / 'logs'
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR, exist_ok=True)
+
+# ログ設定
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'access': {
+            'format': '{asctime} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+# production環境でのみファイルログを有効化
+if DJANGO_ENV == 'production':
+    LOGGING['handlers']['access_file'] = {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'filename': os.path.join(LOG_DIR, 'access.log'),
+        'formatter': 'access',
+        'maxBytes': 1024 * 1024 * 10,  # 10MB
+        'backupCount': 5,
+    }
+    LOGGING['handlers']['error_file'] = {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'filename': os.path.join(LOG_DIR, 'error.log'),
+        'formatter': 'verbose',
+        'maxBytes': 1024 * 1024 * 10,  # 10MB
+        'backupCount': 5,
+    }
+
+    # ファイルハンドラーを追加
+    LOGGING['loggers']['django']['handlers'].append('error_file')
+    LOGGING['loggers']['django.request']['handlers'].append('access_file')
+    LOGGING['loggers']['django.server']['handlers'].append('access_file')

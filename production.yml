@@ -28,6 +28,8 @@ services:
     container_name: bitcoin-drf-prod
     ports:
       - "9000:8000"
+    volumes:
+      - ./logs/drf:/app/logs
     depends_on:
       mysql:
         condition: service_healthy
