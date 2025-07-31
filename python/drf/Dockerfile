@@ -24,11 +24,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # プロジェクトファイルをコピー
 COPY . .
 
+# ログディレクトリを作成
+RUN mkdir -p /app/logs
+
 # 静的ファイルを収集
 RUN python manage.py collectstatic --noinput
 
 # ポートを公開
 EXPOSE 8000
 
-# 起動コマンド
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "mysql_api.wsgi:application"]
+# 起動コマンド（アクセスログとエラーログを有効化）
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--access-logfile", "-", "--error-logfile", "-", "--access-logformat", "%(h)s %(l)s %(u)s %(t)s \"%(r)s\" %(s)s %(b)s \"%(f)s\" \"%(a)s\"", "--log-level", "info", "mysql_api.wsgi:application"]
