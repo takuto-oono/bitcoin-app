@@ -1,13 +1,14 @@
 package api
 
 import (
-	"bitcoin-app-golang/config"
-	"bitcoin-app-golang/consts"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 )
 
 func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {

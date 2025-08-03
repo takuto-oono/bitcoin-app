@@ -1,12 +1,13 @@
 package api
 
 import (
-	"bitcoin-app-golang/config"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"bitcoin-app-golang/config"
 )
 
 func TestNewFastAPI(t *testing.T) {
