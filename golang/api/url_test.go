@@ -383,7 +383,36 @@ func TestGolangServerURL_GetHealthcheck(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "success",
+			b:       GolangServerURL("https://localhost:8080"),
+			want:    "https://localhost:8080/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different port",
+			b:       GolangServerURL("https://localhost:3000"),
+			want:    "https://localhost:3000/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different host",
+			b:       GolangServerURL("https://api.example.com"),
+			want:    "https://api.example.com/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with trailing slash",
+			b:       GolangServerURL("https://localhost:8080/"),
+			want:    "https://localhost:8080/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "error empty base URL",
+			b:       GolangServerURL(""),
+			want:    "",
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -406,7 +435,36 @@ func TestDRFServerURL_GetHealthcheck(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "success",
+			d:       DRFServerURL("https://localhost:8080"),
+			want:    "https://localhost:8080/api/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different port",
+			d:       DRFServerURL("https://localhost:3000"),
+			want:    "https://localhost:3000/api/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different host",
+			d:       DRFServerURL("https://api.example.com"),
+			want:    "https://api.example.com/api/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with trailing slash",
+			d:       DRFServerURL("https://localhost:8080/"),
+			want:    "https://localhost:8080/api/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "error empty base URL",
+			d:       DRFServerURL(""),
+			want:    "",
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -429,7 +487,36 @@ func TestFastAPIURL_GetHealthcheck(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "success",
+			f:       FastAPIURL("https://localhost:8080"),
+			want:    "https://localhost:8080/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different port",
+			f:       FastAPIURL("https://localhost:3000"),
+			want:    "https://localhost:3000/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with different host",
+			f:       FastAPIURL("https://api.example.com"),
+			want:    "https://api.example.com/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "success with trailing slash",
+			f:       FastAPIURL("https://localhost:8080/"),
+			want:    "https://localhost:8080/healthcheck/",
+			wantErr: false,
+		},
+		{
+			name:    "error empty base URL",
+			f:       FastAPIURL(""),
+			want:    "",
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
