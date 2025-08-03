@@ -1,6 +1,9 @@
 package api
 
-import "bitcoin-app-golang/config"
+import (
+	"bitcoin-app-golang/config"
+	"net/http"
+)
 
 type IFastAPI interface {
 	GetHealthcheck() error
@@ -24,7 +27,7 @@ func (f *FastAPI) GetHealthcheck() error {
 		return err
 	}
 
-	if err := f.API.Do("GET", nil, nil, url, nil); err != nil {
+	if err := f.API.Do(http.MethodGet, nil, nil, url, nil); err != nil {
 		return err
 	}
 
