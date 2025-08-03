@@ -7,6 +7,8 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 )
 
+require github.com/line/line-bot-sdk-go/v7 v7.21.0
+
 require (
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect

@@ -9,7 +9,7 @@ const (
 	TestBitFlyerAPIKey    = "BITFLYER_API_KEY_HOGE_HOGE"
 	TestBitFlyerAPISecret = "BITFLYER_API_SECRET_HOGE_HOGE"
 
-	TestLineChannelToken  = "LINE_CHANNEL_TOKN_HOGE_HOGE"
+	TestLineChannelToken  = "LINE_CHANNEL_TOKEN_HOGE_HOGE"
 	TestLineChannelSecret = "LINE_CHANNEL_SECRET_HOGE_HOGE"
 	TestLineGroupID       = "LINE_GROUP_ID_HOGE_HOGE"
 )

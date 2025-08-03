@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,10 @@ func NewRouter(cfg config.Config) *gin.Engine {
 
 func setRoutes(r *gin.Engine, cfg config.Config) *gin.Engine {
 	bitFlyerHandler := handler.NewBitFlyerHandler(cfg)
+	lineHandler, err := handler.NewLineHandler(cfg)
+	if err != nil {
+		panic(fmt.Errorf("failed to create Line handler: %w", err))
+	}
 
 	r.GET("/test", func(c *gin.Context) {
 		c.String(http.StatusOK, "hello golang server")
@@ -26,6 +31,10 @@ func setRoutes(r *gin.Engine, cfg config.Config) *gin.Engine {
 	bitflyer.GET("/ticker", bitFlyerHandler.GetTickerFromBitFlyer)
 	bitflyer.POST("/order/buy", bitFlyerHandler.BuyOrder)
 	bitflyer.POST("/order/sell", bitFlyerHandler.SellOrder)
+
+	line := r.Group("/line")
+	line.POST("/message", lineHandler.PostMessage)
+	line.POST("/callback", lineHandler.CallbackMessage) // LINEのグループIDを取得するために実装したエンドポイントを一応残しておく
 
 	return r
 }
