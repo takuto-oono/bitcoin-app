@@ -52,52 +52,6 @@ func main() {
 	drfServerChan := make(chan HealthCheckResult, resultChanSize)
 	fastAPIChan := make(chan HealthCheckResult, resultChanSize)
 
-	editCheckResult := func(results []HealthCheckResult) string {
-		editedResults := make([]string, 0, len(results))
-
-		for i, r := range results {
-			if i == 0 {
-				result := ""
-				if r.Error != nil {
-					result = fmt.Sprintf("Time: %s, Status: NG", convertJST(r.TimeStamp))
-				} else {
-					result = fmt.Sprintf("Time: %s, Status: OK", convertJST(r.TimeStamp))
-				}
-				editedResults = append(editedResults, result)
-				continue
-			}
-
-			if i == len(results)-1 {
-				result := ""
-				if r.Error != nil {
-					result = fmt.Sprintf("Time: %s, Status: NG", convertJST(r.TimeStamp))
-				} else {
-					result = fmt.Sprintf("Time: %s, Status: OK", convertJST(r.TimeStamp))
-				}
-				editedResults = append(editedResults, result)
-				continue
-			}
-
-			if (r.Error != nil) == (results[i-1].Error != nil) {
-				continue
-			}
-
-			result := ""
-			if r.Error != nil {
-				result = fmt.Sprintf("Time: %s, Status: Down", convertJST(r.TimeStamp))
-			} else {
-				result = fmt.Sprintf("Time: %s, Status: Up", convertJST(r.TimeStamp))
-			}
-			editedResults = append(editedResults, result)
-		}
-
-		if len(editedResults) == 0 {
-			return "No health check results available."
-		}
-
-		return strings.Join(editedResults, "\n")
-	}
-
 	for {
 		select {
 		case <-checkTicker.C:
@@ -153,9 +107,9 @@ func main() {
 				return sortResultFunc(a, b)
 			})
 
-			golangHealth := editCheckResult(golangResult)
-			drfHealth := editCheckResult(drfResult)
-			fastAPIHealth := editCheckResult(fastAPIResult)
+			golangHealth := summarizeHealthTransitions(golangResult)
+			drfHealth := summarizeHealthTransitions(drfResult)
+			fastAPIHealth := summarizeHealthTransitions(fastAPIResult)
 
 			healthMessage := fmt.Sprintf("%s Health:\n%s\n\n%s Health:\n%s\n\n%s Health:\n%s",
 				GolangServerName, golangHealth, DRFServerName, drfHealth, FastAPIServerName, fastAPIHealth)
@@ -194,4 +148,50 @@ func sortResultFunc(a, b HealthCheckResult) int {
 		return 1
 	}
 	return 0
+}
+
+func summarizeHealthTransitions(results []HealthCheckResult) string {
+	editedResults := make([]string, 0, len(results))
+
+	for i, r := range results {
+		if i == 0 {
+			result := ""
+			if r.Error != nil {
+				result = fmt.Sprintf("Time: %s, Status: NG", convertJST(r.TimeStamp))
+			} else {
+				result = fmt.Sprintf("Time: %s, Status: OK", convertJST(r.TimeStamp))
+			}
+			editedResults = append(editedResults, result)
+			continue
+		}
+
+		if i == len(results)-1 {
+			result := ""
+			if r.Error != nil {
+				result = fmt.Sprintf("Time: %s, Status: NG", convertJST(r.TimeStamp))
+			} else {
+				result = fmt.Sprintf("Time: %s, Status: OK", convertJST(r.TimeStamp))
+			}
+			editedResults = append(editedResults, result)
+			continue
+		}
+
+		if (r.Error != nil) == (results[i-1].Error != nil) {
+			continue
+		}
+
+		result := ""
+		if r.Error != nil {
+			result = fmt.Sprintf("Time: %s, Status: Down", convertJST(r.TimeStamp))
+		} else {
+			result = fmt.Sprintf("Time: %s, Status: Up", convertJST(r.TimeStamp))
+		}
+		editedResults = append(editedResults, result)
+	}
+
+	if len(editedResults) == 0 {
+		return "No health check results available."
+	}
+
+	return strings.Join(editedResults, "\n")
 }
