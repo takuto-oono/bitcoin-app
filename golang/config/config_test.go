@@ -8,6 +8,10 @@ import (
 const (
 	TestBitFlyerAPIKey    = "BITFLYER_API_KEY_HOGE_HOGE"
 	TestBitFlyerAPISecret = "BITFLYER_API_SECRET_HOGE_HOGE"
+
+	TestLineChannelToken  = "LINE_CHANNEL_TOKN_HOGE_HOGE"
+	TestLineChannelSecret = "LINE_CHANNEL_SECRET_HOGE_HOGE"
+	TestLineGroupID       = "LINE_GROUP_ID_HOGE_HOGE"
 )
 
 func TestNewConfig(t *testing.T) {
@@ -39,6 +43,11 @@ func TestNewConfig(t *testing.T) {
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 10,
 				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
 			},
 			wantErr: false,
 		},
@@ -59,6 +68,11 @@ func TestNewConfig(t *testing.T) {
 				},
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 1,
+				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
 				},
 			},
 			wantErr: false,
@@ -119,6 +133,11 @@ func TestConfig_setFromToml(t *testing.T) {
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 10,
 				},
+				Line: Line{
+					ChannelToken:  "",
+					ChannelSecret: "",
+					GroupID:       "",
+				},
 			},
 			wantErr: false,
 		},
@@ -135,6 +154,11 @@ func TestConfig_setFromToml(t *testing.T) {
 				BitFlyer: BitFlyer{},
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 1,
+				},
+				Line: Line{
+					ChannelToken:  "",
+					ChannelSecret: "",
+					GroupID:       "",
 				},
 			},
 			wantErr: false,
@@ -182,6 +206,11 @@ func TestConfig_setFromEnv(t *testing.T) {
 					ApiKey:    TestBitFlyerAPIKey,
 					ApiSecret: TestBitFlyerAPISecret,
 				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
 			},
 			wantErr: false,
 		},
@@ -227,6 +256,11 @@ func TestConfig_mustCheck(t *testing.T) {
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 10,
 				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
 			},
 			wantErr: false,
 		},
@@ -248,6 +282,11 @@ func TestConfig_mustCheck(t *testing.T) {
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 10,
 				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
 			},
 			wantErr: true,
 		},
@@ -264,6 +303,11 @@ func TestConfig_mustCheck(t *testing.T) {
 				},
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 10,
+				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
 				},
 			},
 			wantErr: true,
@@ -282,6 +326,11 @@ func TestConfig_mustCheck(t *testing.T) {
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 10,
 				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
 			},
 			wantErr: true,
 		},
@@ -299,6 +348,11 @@ func TestConfig_mustCheck(t *testing.T) {
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 10,
 				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
 			},
 			wantErr: true,
 		},
@@ -315,6 +369,77 @@ func TestConfig_mustCheck(t *testing.T) {
 				},
 				TickerBatch: TickerBatch{
 					BatchIntervalSec: 0,
+				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "fail line channel token is empty",
+			config: &Config{
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
+				},
+				BitFlyer: BitFlyer{
+					ApiKey:    TestBitFlyerAPIKey,
+					ApiSecret: TestBitFlyerAPISecret,
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
+				Line: Line{
+					ChannelToken:  "",
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "fail line channel secret is empty",
+			config: &Config{
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
+				},
+				BitFlyer: BitFlyer{
+					ApiKey:    TestBitFlyerAPIKey,
+					ApiSecret: TestBitFlyerAPISecret,
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: "",
+					GroupID:       TestLineGroupID,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "fail line groupID is empty",
+			config: &Config{
+				ServerURL: ServerURL{
+					GolangServer: "http://localhost:8080",
+					DRFServer:    "http://localhost:8000",
+				},
+				BitFlyer: BitFlyer{
+					ApiKey:    TestBitFlyerAPIKey,
+					ApiSecret: TestBitFlyerAPISecret,
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       "",
 				},
 			},
 			wantErr: true,
