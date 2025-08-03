@@ -14,6 +14,10 @@ import (
 
 const (
 	resultChanSize = 60 * 60
+
+	GolangServerName  = "Golang Server"
+	DRFServerName     = "DRF Server"
+	FastAPIServerName = "FastAPI Server"
 )
 
 func main() {
@@ -100,7 +104,7 @@ func main() {
 			go func() {
 				err := golangServer.GetHealthcheck()
 				golangServerChan <- HealthCheckResult{
-					ServerName: "Golang Server",
+					ServerName: GolangServerName,
 					TimeStamp:  time.Now().Unix(),
 					Error:      err,
 				}
@@ -109,7 +113,7 @@ func main() {
 			go func() {
 				err := drf.GetHealthcheck()
 				drfServerChan <- HealthCheckResult{
-					ServerName: "DRF Server",
+					ServerName: DRFServerName,
 					TimeStamp:  time.Now().Unix(),
 					Error:      err,
 				}
@@ -118,7 +122,7 @@ func main() {
 			go func() {
 				err := fastAPIServer.GetHealthcheck()
 				fastAPIChan <- HealthCheckResult{
-					ServerName: "FastAPI Server",
+					ServerName: FastAPIServerName,
 					TimeStamp:  time.Now().Unix(),
 					Error:      err,
 				}
@@ -168,8 +172,8 @@ func main() {
 			drfHealth := editCheckResult(drfResult)
 			fastAPIHealth := editCheckResult(fastAPIResult)
 
-			healthMessage := fmt.Sprintf("Golang Server Health:\n%s\n\nDRF Server Health:\n%s\n\nFastAPI Server Health:\n%s",
-				golangHealth, drfHealth, fastAPIHealth)
+			healthMessage := fmt.Sprintf("%s Health:\n%s\n\n%s Health:\n%s\n\n%s Health:\n%s",
+				GolangServerName, golangHealth, DRFServerName, drfHealth, FastAPIServerName, fastAPIHealth)
 
 			if err := lineAPI.PostMessage(healthMessage); err != nil {
 				log.Printf("Failed to send health check notification: %v", err)
