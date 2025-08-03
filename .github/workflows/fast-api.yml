@@ -126,10 +126,10 @@ jobs:
           # Dockerコンテナが正常に起動するかテスト
           docker run -d --name fastapi-test -p 8001:8001 fastapi-app:test
           sleep 5
-          
+
           # ヘルスチェック
-          curl -f http://localhost:8001/ || exit 1
-          
+          curl -f http://localhost:8001/healthcheck || exit 1
+
           # コンテナを停止・削除
           docker stop fastapi-test
           docker rm fastapi-test
