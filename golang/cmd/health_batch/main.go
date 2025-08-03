@@ -144,28 +144,13 @@ func main() {
 			}
 
 			slices.SortFunc(golangResult, func(a, b HealthCheckResult) int {
-				if a.TimeStamp < b.TimeStamp {
-					return -1
-				} else if a.TimeStamp > b.TimeStamp {
-					return 1
-				}
-				return 0
+				return sortResultFunc(a, b)
 			})
 			slices.SortFunc(drfResult, func(a, b HealthCheckResult) int {
-				if a.TimeStamp < b.TimeStamp {
-					return -1
-				} else if a.TimeStamp > b.TimeStamp {
-					return 1
-				}
-				return 0
+				return sortResultFunc(a, b)
 			})
 			slices.SortFunc(fastAPIResult, func(a, b HealthCheckResult) int {
-				if a.TimeStamp < b.TimeStamp {
-					return -1
-				} else if a.TimeStamp > b.TimeStamp {
-					return 1
-				}
-				return 0
+				return sortResultFunc(a, b)
 			})
 
 			golangHealth := editCheckResult(golangResult)
@@ -200,4 +185,13 @@ func convertJST(unixTime int64) string {
 
 	jstTime := utcTime.In(jst)
 	return jstTime.Format("2006-01-02 15:04:05")
+}
+
+func sortResultFunc(a, b HealthCheckResult) int {
+	if a.TimeStamp < b.TimeStamp {
+		return -1
+	} else if a.TimeStamp > b.TimeStamp {
+		return 1
+	}
+	return 0
 }
