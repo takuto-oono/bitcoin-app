@@ -23,8 +23,8 @@ func setRoutes(r *gin.Engine, cfg config.Config) *gin.Engine {
 		panic(fmt.Errorf("failed to create Line handler: %w", err))
 	}
 
-	r.GET("/test", func(c *gin.Context) {
-		c.String(http.StatusOK, "hello golang server")
+	r.GET("/healthcheck/", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK")
 	})
 
 	bitflyer := r.Group("/bitflyer")

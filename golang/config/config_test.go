@@ -33,8 +33,9 @@ func TestNewConfig(t *testing.T) {
 			},
 			want: Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -59,8 +60,9 @@ func TestNewConfig(t *testing.T) {
 			},
 			want: Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://golang-server:8080",
-					DRFServer:    "http://drf:8000",
+					GolangServer:  "http://golang-server:8080",
+					DRFServer:     "http://drf:8000",
+					FastAPIServer: "http://fastapi:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -126,8 +128,9 @@ func TestConfig_setFromToml(t *testing.T) {
 			},
 			want: Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{},
 				TickerBatch: TickerBatch{
@@ -148,8 +151,9 @@ func TestConfig_setFromToml(t *testing.T) {
 			},
 			want: Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://golang-server:8080",
-					DRFServer:    "http://drf:8000",
+					GolangServer:  "http://golang-server:8080",
+					DRFServer:     "http://drf:8000",
+					FastAPIServer: "http://fastapi:8001",
 				},
 				BitFlyer: BitFlyer{},
 				TickerBatch: TickerBatch{
@@ -246,8 +250,9 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "success",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -294,8 +299,32 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "fail drf server is empty",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "",
+					FastAPIServer: "http://localhost:8001",
+				},
+				BitFlyer: BitFlyer{
+					ApiKey:    TestBitFlyerAPIKey,
+					ApiSecret: TestBitFlyerAPISecret,
+				},
+				TickerBatch: TickerBatch{
+					BatchIntervalSec: 10,
+				},
+				Line: Line{
+					ChannelToken:  TestLineChannelToken,
+					ChannelSecret: TestLineChannelSecret,
+					GroupID:       TestLineGroupID,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "fail fast api server is empty",
+			config: &Config{
+				ServerURL: ServerURL{
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -316,8 +345,9 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "fail bitflyer api key is empty",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    "",
@@ -338,8 +368,9 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "fail bitflyer api secret is empty",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -360,8 +391,9 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "fail ticker batch interval is less than or equal to 0",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -382,8 +414,9 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "fail line channel token is empty",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -404,8 +437,9 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "fail line channel secret is empty",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,
@@ -426,8 +460,9 @@ func TestConfig_mustCheck(t *testing.T) {
 			name: "fail line groupID is empty",
 			config: &Config{
 				ServerURL: ServerURL{
-					GolangServer: "http://localhost:8080",
-					DRFServer:    "http://localhost:8000",
+					GolangServer:  "http://localhost:8080",
+					DRFServer:     "http://localhost:8000",
+					FastAPIServer: "http://localhost:8001",
 				},
 				BitFlyer: BitFlyer{
 					ApiKey:    TestBitFlyerAPIKey,

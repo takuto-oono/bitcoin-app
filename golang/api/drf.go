@@ -7,6 +7,7 @@ import (
 )
 
 type IDRFAPI interface {
+	GetHealthcheck() error
 	GetBitFlyerTickers() ([]GetTickerFromDRFResponse, error)
 	PostBitFlyerTicker(ticker PostTickerDRFRequest) error
 	DeleteBitFlyerTicker(id int) error
@@ -22,6 +23,19 @@ func NewDRFAPI(cfg config.Config) IDRFAPI {
 		Config: cfg,
 		API:    NewAPI(),
 	}
+}
+
+func (d *DRFAPI) GetHealthcheck() error {
+	url, err := DRFServerURL(d.Config.ServerURL.DRFServer).GetHealthcheck()
+	if err != nil {
+		return err
+	}
+
+	if err := d.API.Do(http.MethodGet, nil, nil, url, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (d *DRFAPI) GetBitFlyerTickers() ([]GetTickerFromDRFResponse, error) {
