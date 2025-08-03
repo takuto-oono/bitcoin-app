@@ -11,6 +11,7 @@ import (
 type BitFlyerURL string
 type GolangServerURL string
 type DRFServerURL string
+type FastAPIURL string
 
 func (b BitFlyerURL) GetTicker(productCode string) (string, error) {
 	qVal := url.Values{}
@@ -24,12 +25,20 @@ func (b BitFlyerURL) SendChildOrder() (string, error) {
 	return createUrl(string(b), "v1/me/sendchildorder", nil)
 }
 
+func (b GolangServerURL) GetHealthcheck() (string, error) {
+	return createUrl(string(b), "/healthcheck", nil)
+}
+
 func (g GolangServerURL) GetTicker(productCode string) (string, error) {
 	qVal := url.Values{}
 	if productCode != "" {
 		qVal.Set("product_code", productCode)
 	}
 	return createUrl(string(g), "/bitflyer/ticker", qVal)
+}
+
+func (d DRFServerURL) GetHealthcheck() (string, error) {
+	return createUrl(string(d), "/api/healthcheck", nil)
 }
 
 func (g DRFServerURL) GetTickers() (string, error) {
@@ -46,6 +55,10 @@ func (d DRFServerURL) DeleteTicker(id int) (string, error) {
 	}
 
 	return createUrl(string(d), "/api/tickers", nil, strconv.Itoa(id))
+}
+
+func (f FastAPIURL) GetHealthcheck() (string, error) {
+	return createUrl(string(f), "/healthcheck", nil)
 }
 
 func createUrl(baseUrl, p string, qVal url.Values, el ...string) (string, error) {

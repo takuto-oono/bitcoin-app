@@ -7,6 +7,7 @@ import (
 )
 
 type IGolangServerAPI interface {
+	GetHealthcheck() error
 	GetBitFlyerTicker(productCode string) (TickerFromGolangServer, error)
 }
 
@@ -20,6 +21,19 @@ func NewGolangServerAPI(cfg config.Config) IGolangServerAPI {
 		Config: cfg,
 		API:    NewAPI(),
 	}
+}
+
+func (g *GolangServerAPI) GetHealthcheck() error {
+	url, err := GolangServerURL(g.Config.ServerURL.GolangServer).GetHealthcheck()
+	if err != nil {
+		return err
+	}
+
+	if err := g.API.Do(http.MethodGet, nil, nil, url, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (g *GolangServerAPI) GetBitFlyerTicker(productCode string) (TickerFromGolangServer, error) {

@@ -6,5 +6,6 @@ router = routers.SimpleRouter()
 router.register('tickers', views.TickerViewSet)
 
 urlpatterns = [
+    path("healthcheck/", views.healthcheck, name="healthcheck"),
     path('', include(router.urls)),
 ]

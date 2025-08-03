@@ -1,6 +1,7 @@
 [serverURL]
 golangServer="http://localhost:8080"
 drfServer="http://localhost:8000"
+fastAPIServer="http://localhost:8001"
 
 [tickerBatch]
 batchIntervalSec=10

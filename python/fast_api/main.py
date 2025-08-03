@@ -14,9 +14,9 @@ load_dotenv(dotenv_path=args.env)
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/healthcheck")
 def read_root():
-    return {"message": "Hello Fast API!"}
+    return {"message": "ok"}
 
 
 def main():

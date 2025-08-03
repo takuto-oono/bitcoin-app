@@ -19,8 +19,9 @@ func (c Credential) GoString() string {
 }
 
 type ServerURL struct {
-	GolangServer string `toml:"golangServer"`
-	DRFServer    string `toml:"drfServer"`
+	GolangServer  string `toml:"golangServer"`
+	DRFServer     string `toml:"drfServer"`
+	FastAPIServer string `toml:"fastAPIServer"`
 }
 
 type BitFlyer struct {
@@ -94,6 +95,10 @@ func (c *Config) mustCheck() error {
 
 	if c.ServerURL.DRFServer == "" {
 		return errors.New("drf server is empty")
+	}
+
+	if c.ServerURL.FastAPIServer == "" {
+		return errors.New("fastapi server is empty")
 	}
 
 	if c.BitFlyer.ApiKey == "" {

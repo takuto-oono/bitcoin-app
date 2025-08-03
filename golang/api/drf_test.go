@@ -1,15 +1,14 @@
 package api
 
 import (
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
-
-	"bitcoin-app-golang/config"
-	"bitcoin-app-golang/consts"
 )
 
 func TestDRFAPI_PostBitFlyerTicker(t *testing.T) {
@@ -473,6 +472,31 @@ func TestDRFAPI_DeleteBitFlyerTicker(t *testing.T) {
 			}
 			if err := d.DeleteBitFlyerTicker(tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("DRFAPI.DeleteBitFlyerTicker() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestDRFAPI_GetHealthcheck(t *testing.T) {
+	type fields struct {
+		Config config.Config
+		API    *API
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			d := &DRFAPI{
+				Config: tt.fields.Config,
+				API:    tt.fields.API,
+			}
+			if err := d.GetHealthcheck(); (err != nil) != tt.wantErr {
+				t.Errorf("DRFAPI.GetHealthcheck() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

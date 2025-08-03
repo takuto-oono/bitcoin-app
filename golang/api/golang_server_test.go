@@ -1,14 +1,13 @@
 package api
 
 import (
+	"bitcoin-app-golang/config"
+	"bitcoin-app-golang/consts"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
-
-	"bitcoin-app-golang/config"
-	"bitcoin-app-golang/consts"
 )
 
 func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
@@ -164,6 +163,31 @@ func TestGolangServerAPI_GetBitFlyerTicker(t *testing.T) {
 			}
 			if !tt.wantErr && !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GolangServerAPI.GetBitFlyerTicker() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGolangServerAPI_GetHealthcheck(t *testing.T) {
+	type fields struct {
+		Config config.Config
+		API    *API
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			g := &GolangServerAPI{
+				Config: tt.fields.Config,
+				API:    tt.fields.API,
+			}
+			if err := g.GetHealthcheck(); (err != nil) != tt.wantErr {
+				t.Errorf("GolangServerAPI.GetHealthcheck() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

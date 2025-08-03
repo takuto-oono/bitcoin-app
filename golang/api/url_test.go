@@ -1,10 +1,9 @@
 package api
 
 import (
+	"bitcoin-app-golang/consts"
 	"net/url"
 	"testing"
-
-	"bitcoin-app-golang/consts"
 )
 
 func TestBitFlyerURL_GetTicker(t *testing.T) {
@@ -372,6 +371,75 @@ func TestDRFServerURL_DeleteTicker(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("DRFServerURL.DeleteTicker() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGolangServerURL_GetHealthcheck(t *testing.T) {
+	tests := []struct {
+		name    string
+		b       GolangServerURL
+		want    string
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.b.GetHealthcheck()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GolangServerURL.GetHealthcheck() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("GolangServerURL.GetHealthcheck() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDRFServerURL_GetHealthcheck(t *testing.T) {
+	tests := []struct {
+		name    string
+		d       DRFServerURL
+		want    string
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.d.GetHealthcheck()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DRFServerURL.GetHealthcheck() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("DRFServerURL.GetHealthcheck() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFastAPIURL_GetHealthcheck(t *testing.T) {
+	tests := []struct {
+		name    string
+		f       FastAPIURL
+		want    string
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.f.GetHealthcheck()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("FastAPIURL.GetHealthcheck() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("FastAPIURL.GetHealthcheck() = %v, want %v", got, tt.want)
 			}
 		})
 	}
