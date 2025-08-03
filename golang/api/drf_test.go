@@ -483,16 +483,83 @@ func TestDRFAPI_GetHealthcheck(t *testing.T) {
 		API    *API
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		wantErr bool
+		name       string
+		serverFunc func() *httptest.Server
+		fields     fields
+		wantErr    bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "正常系 - ヘルスチェック成功",
+			serverFunc: func() *httptest.Server {
+				return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					if r.URL.Path != "/api/healthcheck/" {
+						t.Errorf("Expected path '/api/healthcheck/', got %s", r.URL.Path)
+					}
+
+					if r.Method != http.MethodGet {
+						t.Errorf("Expected method GET, got %s", r.Method)
+					}
+
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusOK)
+					json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+				}))
+			},
+			fields: fields{
+				API: NewAPI(),
+			},
+			wantErr: false,
+		},
+		{
+			name: "異常系 - サーバーエラー",
+			serverFunc: func() *httptest.Server {
+				return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte("Internal Server Error"))
+				}))
+			},
+			fields: fields{
+				API: NewAPI(),
+			},
+			wantErr: true,
+		},
+		{
+			name: "異常系 - サービス利用不可",
+			serverFunc: func() *httptest.Server {
+				return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusServiceUnavailable)
+					w.Write([]byte("Service Unavailable"))
+				}))
+			},
+			fields: fields{
+				API: NewAPI(),
+			},
+			wantErr: true,
+		},
+		{
+			name: "異常系 - 404 Not Found",
+			serverFunc: func() *httptest.Server {
+				return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusNotFound)
+					w.Write([]byte("Not Found"))
+				}))
+			},
+			fields: fields{
+				API: NewAPI(),
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			server := tt.serverFunc()
+			defer server.Close()
+
+			cfg := tt.fields.Config
+			cfg.ServerURL.DRFServer = server.URL
+
 			d := &DRFAPI{
-				Config: tt.fields.Config,
+				Config: cfg,
 				API:    tt.fields.API,
 			}
 			if err := d.GetHealthcheck(); (err != nil) != tt.wantErr {
